@@ -145,7 +145,7 @@ class SafetyService:
                 "1. Threatening or harassing (e.g. death threats, blackmail, stalking).\n"
                 "2. Fraudulent, scam-related, or financial exploit (e.g. phishing, credit card fraud, hacking accounts, buying fake reviews).\n"
                 "3. Promoting or requesting illegal activities (e.g. buying illegal drugs, smuggling, passport forgery, weapons).\n"
-                "4. Nonsensical gibberish or keyboard mashing (e.g. 'Bcdaahjsieiej') that contains no actual words in English, Hindi, or Hinglish.\n\n"
+                "4. Nonsensical gibberish or keyboard mashing (e.g. 'Bcdaahjsieiej') that contains no actual words in English, Hindi, or Hinglish. Note that brand/app names like 'trvios', 'trvios.com', and 'tara' are completely valid words and must never be classified as gibberish.\n\n"
                 "Respond with EXACTLY 'SAFE' or 'UNSAFE: <reason>'. Do not include any other characters or commentary."
             )
             
