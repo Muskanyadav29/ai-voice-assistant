@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trvios AI - Real-time Voice Call Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #030712 0%, #0b0f19 50%, #020617 100%);
+            --primary-glow: rgba(6, 182, 212, 0.4);
+            --secondary-glow: rgba(139, 92, 246, 0.4);
+            --success-glow: rgba(16, 185, 129, 0.4);
+            --danger-glow: rgba(239, 68, 68, 0.45);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Background Glows */
+        .ambient-glow {
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            border-radius: 50%;
+            filter: blur(140px);
+            z-index: 0;
+            opacity: 0.35;
+            pointer-events: none;
+        }
+
+        .glow-left {
+            top: 10%;
+            left: -10%;
+            background: #0891b2;
+        }
+
+        .glow-right {
+            bottom: 10%;
+            right: -10%;
+            background: #7c3aed;
+        }
+
+        /* Header Styling */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--glass-border);
+            backdrop-filter: blur(12px);
+            z-index: 10;
+            background: rgba(3, 7, 18, 0.4);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 28px;
+            height: 28px;
+            fill: #06b6d4;
+            filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.5));
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: 0.5px;
+            background: linear-gradient(to right, #22d3ee, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            border: 1px solid var(--glass-border);
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.25s ease;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Main Call Dashboard Area */
+        .dashboard-container {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 24px;
+            padding: 24px 40px;
+            max-width: 1600px;
+            width: 100%;
+            margin: 0 auto;
+            z-index: 10;
+            height: calc(100vh - 85px);
+        }
+
+        /* Call Console (Left Side) */
+        .call-console {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            backdrop-filter: blur(16px);
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .call-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 10px 20px;
+            border-radius: 50px;
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .status-ping {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #64748b;
+            box-shadow: 0 0 10px rgba(100, 116, 139, 0.5);
+        }
+
+        .state-disconnected .status-ping {
+            background-color: #ef4444;
+            box-shadow: 0 0 12px #ef4444;
+        }
+
+        .state-connecting .status-ping {
+            background-color: #f59e0b;
+            box-shadow: 0 0 12px #f59e0b;
+            animation: pulseGlow 1s infinite alternate;
+        }
+
+        .state-listening .status-ping {
+            background-color: #06b6d4;
+            box-shadow: 0 0 12px #06b6d4;
+            animation: pulseGlow 0.8s infinite alternate;
+        }
+
+        .state-thinking .status-ping {
+            background-color: #a855f7;
+            box-shadow: 0 0 12px #a855f7;
+            animation: pulseGlow 0.6s infinite alternate;
+        }
+
+        .state-speaking .status-ping {
+            background-color: #10b981;
+            box-shadow: 0 0 12px #10b981;
+            animation: pulseGlow 0.8s infinite alternate;
+        }
+
+        .state-muted .status-ping {
+            background-color: #94a3b8;
+            box-shadow: 0 0 10px #94a3b8;
+        }
+
+        .status-text {
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #e2e8f0;
+        }
+
+        /* Call Screen Layout (Avatars and Visualizer) */
+        .call-screen {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+            max-width: 800px;
+            margin: auto 0;
+            position: relative;
+            gap: 30px;
+        }
+
+        .participant-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            width: 180px;
+            transition: all 0.3s ease;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .avatar-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .participant-card.active .avatar-wrapper {
+            transform: scale(1.08);
+        }
+
+        .participant-card.active .avatar-wrapper::before {
+            opacity: 1;
+            animation: pulseRing 2s infinite ease-out;
+        }
+
+        /* Participant specific rings */
+        .user-card.active .avatar-wrapper::before {
+            border-color: #06b6d4;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+        }
+
+        .bot-card.active .avatar-wrapper::before {
+            border-color: #10b981;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .avatar-icon {
+            width: 48px;
+            height: 48px;
+            color: #94a3b8;
+            transition: color 0.3s ease;
+        }
+
+        .participant-card.active .avatar-icon {
+            color: #f8fafc;
+        }
+
+        .user-card.active .avatar-icon {
+            color: #22d3ee;
+        }
+
+        .bot-card.active .avatar-icon {
+            color: #34d399;
+        }
+
+        .participant-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .participant-status {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.03);
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Call central visualizer orb */
+        .center-visualizer-container {
+            position: relative;
+            width: 260px;
+            height: 260px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .call-orb {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #0f172a 30%, #030712 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .call-orb-inner {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.5s ease;
+        }
+
+        .state-listening .call-orb-inner {
+            background: radial-gradient(circle, #0e7490 0%, #0891b2 100%);
+            box-shadow: 0 0 40px var(--primary-glow);
+        }
+
+        .state-thinking .call-orb-inner {
+            background: radial-gradient(circle, #6d28d9 0%, #7c3aed 100%);
+            box-shadow: 0 0 40px var(--secondary-glow);
+        }
+
+        .state-speaking .call-orb-inner {
+            background: radial-gradient(circle, #047857 0%, #10b981 100%);
+            box-shadow: 0 0 45px var(--success-glow);
+        }
+
+        .canvas-visualizer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Controls Panel */
+        .call-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 10;
+            margin-top: auto;
+        }
+
+        .control-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(30, 41, 59, 0.5);
+            color: #cbd5e1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .control-btn:hover {
+            background: rgba(30, 41, 59, 0.95);
+            color: #f8fafc;
+            transform: translateY(-2px);
+        }
+
+        .control-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        .control-btn.btn-start {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: none;
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+        }
+
+        .control-btn.btn-start:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            box-shadow: 0 10px 28px rgba(16, 185, 129, 0.5);
+        }
+
+        .control-btn.btn-hangup {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border: none;
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.35);
+        }
+
+        .control-btn.btn-hangup:hover {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            box-shadow: 0 10px 28px rgba(239, 68, 68, 0.45);
+        }
+
+        .control-btn.active-toggle {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+
+        .control-btn.active-toggle:hover {
+            background: #dc2626;
+        }
+
+        /* Call HUD metrics */
+        .metrics-hud {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 12px 24px;
+            margin-top: 24px;
+        }
+
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .metric-label {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #f1f5f9;
+        }
+
+        /* Right Panel (Chat Transcript Feed) */
+        .transcript-panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-title svg {
+            color: #06b6d4;
+            width: 18px;
+            height: 18px;
+        }
+
+        .transcript-feed {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            scroll-behavior: smooth;
+        }
+
+        .chat-bubble {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 0.92rem;
+            line-height: 1.45;
+            position: relative;
+            animation: bubbleAppear 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .chat-bubble.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(6, 182, 212, 0.08) 100%);
+            border: 1px solid rgba(6, 182, 212, 0.25);
+            color: #22d3ee;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.05);
+        }
+
+        .chat-bubble.bot {
+            align-self: flex-start;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: #e2e8f0;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-bubble.system {
+            align-self: center;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            color: #64748b;
+            font-size: 0.78rem;
+            padding: 6px 12px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .bubble-time {
+            font-size: 0.65rem;
+            color: #64748b;
+            margin-top: 6px;
+            text-align: right;
+        }
+
+        /* Settings Panel (inside right panel or collapsed) */
+        .panel-settings {
+            padding: 16px 20px;
+            border-top: 1px solid var(--glass-border);
+            background: rgba(15, 23, 42, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+
+        .setting-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Standard Slider UI styling */
+        .setting-input {
+            width: 120px;
+            accent-color: #06b6d4;
+            background: #1e293b;
+            height: 6px;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .setting-select {
+            background: #0f172a;
+            color: #cbd5e1;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            outline: none;
+        }
+
+        /* Keyframes */
+        @keyframes pulseRing {
+            0% {
+                transform: scale(0.95);
+                opacity: 0.8;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulseGlow {
+            from {
+                opacity: 0.5;
+                transform: scale(0.92);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1.08);
+            }
+        }
+
+        @keyframes bubbleAppear {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive Styling */
+        @media (max-width: 1024px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                height: auto;
+                overflow-y: auto;
+            }
+
+            .call-console {
+                height: 550px;
+            }
+
+            .transcript-panel {
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 580px) {
+            header {
+                padding: 16px 20px;
+            }
+
+            .dashboard-container {
+                padding: 16px;
+            }
+
+            .call-screen {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .center-visualizer-container {
+                width: 180px;
+                height: 180px;
+            }
+
+            .call-orb {
+                width: 80px;
+                height: 80px;
+            }
+
+            .call-orb-inner {
+                width: 50px;
+                height: 50px;
+            }
+
+            .avatar-wrapper {
+                width: 90px;
+                height: 90px;
+            }
+
+            .avatar-icon {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        .dashboard-container.sidebar-hidden {
+            grid-template-columns: 1fr;
+        }
+
+        .live-subtitle {
+            min-height: 48px;
+            max-width: 600px;
+            width: 100%;
+            margin: 20px auto;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            font-weight: 500;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 12px 24px;
+            border-radius: 16px;
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        /* Dynamic Premium Place Card Components for live log drawer */
+        :root {
+            --assistant: rgba(30, 41, 59, 0.4);
+            --panel-border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            --text: #cbd5e1;
+            --primary: #06b6d4;
+            --muted: #94a3b8;
+            --bg: #0f172a;
+        }
+
+        .place-card {
+            display: flex;
+            flex-direction: row;
+            gap: 16px;
+            background: var(--assistant);
+            border: 1px solid var(--panel-border);
+            border-radius: 16px;
+            padding: 16px;
+            margin: 16px 0;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            align-items: flex-start;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .place-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px -8px rgba(0, 0, 0, 0.25);
+        }
+
+        .place-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 12px;
+            background-color: var(--panel-border);
+            flex-shrink: 0;
+        }
+
+        .place-card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .place-card-name {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: #f8fafc;
+            line-height: 1.3;
+        }
+
+        .place-card-rating {
+            font-size: 0.85rem;
+            color: #eab308;
+            font-weight: 700;
+        }
+
+        .place-card-price {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #10b981;
+            margin-top: 2px;
+        }
+
+        .place-card-amenities {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 3px;
+        }
+
+        .amenity-tag {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--muted);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 3px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .place-card-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 6px 12px;
+            margin: 4px 0;
+            background: rgba(15, 23, 42, 0.3);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--panel-border);
+        }
+
+        .info-item {
+            font-size: 0.8rem;
+            color: var(--muted);
+            line-height: 1.4;
+        }
+
+        .place-card-address {
+            font-size: 0.8rem;
+            color: #64748b;
+            line-height: 1.3;
+            margin-top: 2px;
+        }
+
+        .place-card-link {
+            font-size: 0.82rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .place-card-link:hover {
+            text-decoration: underline;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 20px;
+            border-left: 2px solid var(--panel-border);
+            margin-bottom: 14px;
+            margin-left: 8px;
+        }
+
+        .timeline-time {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 0.82rem;
+            color: var(--primary);
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .timeline-time::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 4px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 2px solid #0f172a;
+        }
+
+        .timeline-content {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .travel-transition {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            margin: 12px auto;
+            position: relative;
+            width: 100%;
+        }
+
+        .travel-icon {
+            font-size: 1.2rem;
+            background: var(--bg);
+            padding: 5px;
+            border-radius: 50%;
+            border: 1px solid var(--panel-border);
+            box-shadow: var(--shadow);
+            z-index: 2;
+        }
+
+        .travel-details {
+            font-size: 0.8rem;
+            color: var(--muted);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 12px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid var(--panel-border);
+        }
+
+        .travel-arrow {
+            font-size: 1.1rem;
+            color: var(--primary);
+            font-weight: 700;
+            animation: bounceArrow 1.5s infinite ease-in-out;
+        }
+
+    </style>
+</head>
+
+<body class="state-disconnected" id="call-body">
+    <!-- Ambient light gradients -->
+    <div class="ambient-glow glow-left"></div>
+    <div class="ambient-glow glow-right"></div>
+
+    <!-- Header navigation -->
+    <header>
+        <div class="logo-container">
+            <svg class="logo-icon" viewBox="0 0 24 24">
+                <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
+            </svg>
+            <span class="logo-text">Trvios AI</span>
+        </div>
+        <div class="header-actions">
+            <a href="/" class="btn-back">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Exit Dashboard
+            </a>
+        </div>
+    </header>
+
+    <!-- Dashboard Layout Grid -->
+    <div class="dashboard-container sidebar-hidden">
+
+        <!-- Call Interface Console -->
+        <main class="call-console">
+            <!-- Call Status HUD -->
+            <div class="call-status-badge">
+                <span class="status-ping"></span>
+                <span class="status-text" id="status-display">Disconnected</span>
+            </div>
+
+            <!-- Central calling screen -->
+            <div class="call-screen">
+                <!-- User Profile (left) -->
+                <div class="participant-card user-card" id="user-card">
+                    <div class="avatar-wrapper">
+                        <svg class="avatar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    <span class="participant-name">You</span>
+                    <span class="participant-status" id="user-subtext">Inactive</span>
+                </div>
+
+                <!-- Central Wave Orb Visualizer -->
+                <div class="center-visualizer-container">
+                    <canvas class="canvas-visualizer" id="canvas-visualizer"></canvas>
+                    <div class="call-orb">
+                        <div class="call-orb-inner">
+                            <!-- Phone call icon inside -->
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" style="color: white;" id="orb-phone-icon">
+                                <path
+                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bot Profile (right) -->
+                <div class="participant-card bot-card" id="bot-card">
+                    <div class="avatar-wrapper">
+                        <svg class="avatar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M12 2v9M8 5h8"></path>
+                        </svg>
+                    </div>
+                    <span class="participant-name">Trvios AI</span>
+                    <span class="participant-status" id="bot-subtext">Offline</span>
+                </div>
+            </div>
+
+            <!-- Live Captions Subtitle Area -->
+            <div class="live-subtitle" id="live-subtitle">Click the phone button to connect the call...</div>
+
+            <!-- In-call key controller buttons -->
+            <div class="call-controls">
+                <!-- Mute Mic Toggle -->
+                <button type="button" class="control-btn" id="btn-mute" title="Mute Microphone" disabled>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                        <line x1="12" y1="19" x2="12" y2="23"></line>
+                        <line x1="8" y1="23" x2="16" y2="23"></line>
+                    </svg>
+                </button>
+
+                <!-- Call Action button (Green: Start / Red: Hangup) -->
+                <button type="button" class="control-btn btn-start" id="btn-call-trigger" title="Start Call">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="call-btn-icon">
+                        <!-- Phone icon -->
+                        <path
+                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                        </path>
+                    </svg>
+                </button>
+
+                <!-- Toggle Transcript Log Panel (Mobile helper) -->
+                <button type="button" class="control-btn" id="btn-toggle-drawer" title="Toggle Log">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <line x1="8" y1="6" x2="21" y2="6"></line>
+                        <line x1="8" y1="12" x2="21" y2="12"></line>
+                        <line x1="8" y1="18" x2="21" y2="18"></line>
+                        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- HUD Statistics Metrics Footer -->
+            <div class="metrics-hud">
+                <div class="metric-item">
+                    <span class="metric-label">Duration</span>
+                    <span class="metric-value" id="call-timer">00:00</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">Voice Level</span>
+                    <span class="metric-value" id="mic-level-val">Muted</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">VAD Activity</span>
+                    <span class="metric-value" id="vad-activity-val">None</span>
+                </div>
+            </div>
+        </main>
+
+        <!-- Sidebar Conversational Feed -->
+        <aside class="transcript-panel hidden" id="transcript-panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Live Conversation Log
+                </div>
+            </div>
+
+            <div class="transcript-feed" id="transcript-feed">
+                <div class="chat-bubble system">
+                    Click the green phone button below to start the live two-way AI call.
+                </div>
+            </div>
+
+            <!-- Configuration Settings in Drawer -->
+            <div class="panel-settings">
+                <div class="setting-item">
+                    <span class="setting-label">Language Mode</span>
+                    <select class="setting-select" id="pref-language">
+                        <option value="hi-IN" selected>Indian (English/Hinglish)</option>
+                        <option value="en-US">US English</option>
+                        <option value="es-ES">Spanish (Español)</option>
+                        <option value="fr-FR">French (Français)</option>
+                        <option value="de-DE">German (Deutsch)</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">Voice Sensitivity</span>
+                    <input type="range" class="setting-input" id="pref-sensitivity" min="5" max="50" value="22"
+                        title="Lower is more sensitive, higher filters noise" />
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- Script loading -->
+    <script src="/voice_dashboard.js" type="module"></script>
+</body>
+
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trvios AI - Intelligent Trip Chat</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <div class="header-text">
+          <p class="eyebrow">Trvios AI Platform</p>
+          <h1>Trip Chat Assistant</h1>
+          <p class="subtitle">Search, discover, and design your perfect itinerary. Answers stream live from verified trips.</p>
+        </div>
+        <div class="header-actions">
+          <div class="status-pill" id="status-pill">
+            <span class="status-dot"></span>
+            <span id="status-text">Checking trips database…</span>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <a href="/voice_dashboard.html" class="btn btn-secondary" style="background: linear-gradient(135deg, #0f172a 0%, #064e3b 100%); border-color: rgba(16,185,129,0.3); color: #34d399; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;" id="voice-call-nav-btn">
+              Voice Call (Live) 📞
+            </a>
+            <a href="/voice.html" class="btn btn-secondary" style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); border-color: rgba(6,182,212,0.3); color: #22d3ee; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;" id="voice-agent-nav-btn">
+              Voice Mode 🎙️
+            </a>
+            <button type="button" class="btn btn-secondary" id="bookings-btn">My Bookings</button>
+            <button type="button" class="btn btn-secondary" id="index-btn">Sync Catalog</button>
+          </div>
+        </div>
+      </header>
+
+      <main class="chat-panel" style="position: relative;">
+        <!-- Recording Overlay -->
+        <div class="recording-overlay" id="recording-overlay">
+          <div class="recording-pulse" id="recording-stop-btn">
+            <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+            </svg>
+          </div>
+          <p class="recording-text">Recording Audio...</p>
+          <p class="recording-subtext">Click the square to stop and submit transcription</p>
+        </div>
+
+        <div class="messages" id="messages">
+          <div class="message assistant">
+            <div class="message-label">Assistant</div>
+            <div class="message-body">
+              Hello there! I'm your Trvios AI travel assistant. Ask me anything about our available tours, budgets, or destinations. 
+              <br/><br/>
+              Try querying:
+              <ul>
+                <li><em>“show me a snow adventure in Manali under ₹20000”</em></li>
+                <li><em>“what can we do on Day 2 in Shimla?”</em></li>
+                <li><em>“looking for heritage packages in Rajasthan”</em></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <form class="composer" id="chat-form">
+          <label class="sr-only" for="query-input">Your question</label>
+          <div class="textarea-wrapper">
+            <textarea
+              id="query-input"
+              rows="2"
+              placeholder="Search trips, itineraries, or ask a question..."
+              required
+            ></textarea>
+            <button type="button" class="btn-mic" id="mic-btn" title="Speak to Voice Bot">
+              <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" y1="19" x2="12" y2="23"></line>
+                <line x1="8" y1="23" x2="16" y2="23"></line>
+              </svg>
+            </button>
+          </div>
+          <div class="composer-actions">
+            <div class="composer-settings">
+              <label class="top-k-field">
+                Results Limit
+                <select id="top-k">
+                  <option value="2">2</option>
+                  <option value="3" selected>3</option>
+                  <option value="5">5</option>
+                </select>
+              </label>
+              <label class="voice-toggle-field">
+                <input type="checkbox" id="voice-toggle" checked />
+                <span>Voice Replies</span>
+              </label>
+            </div>
+            <div class="composer-buttons">
+              <button type="button" class="btn btn-secondary hidden" id="stop-btn">Stop</button>
+              <button type="submit" class="btn btn-primary" id="send-btn">Ask AI</button>
+            </div>
+          </div>
+        </form>
+
+      </main>
+    </div>
+
+    <!-- Slide-out Drawer for Trip Details -->
+    <div class="drawer-overlay" id="drawer-overlay"></div>
+    <div class="drawer" id="trip-drawer">
+      <div class="drawer-header">
+        <h2 id="drawer-title">Trip Information</h2>
+        <button type="button" class="btn-close" id="drawer-close-btn">&times;</button>
+      </div>
+      <div class="drawer-body" id="drawer-body">
+        <!-- Content injected dynamically -->
+      </div>
+    </div>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
+

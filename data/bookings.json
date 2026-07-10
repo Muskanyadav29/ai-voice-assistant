@@ -1,0 +1,47 @@
+[
+  {
+    "id": "TRV-38879",
+    "trip_id": "6987918bf5915890628bac57",
+    "trip_title": "Shimla Hill Retreat",
+    "customer_name": "Explorer User",
+    "booking_date": "2026-07-03",
+    "price": 11499.0,
+    "status": "Confirmed"
+  },
+  {
+    "id": "TRV-32240",
+    "trip_id": "69878f13f5915890628bac43",
+    "trip_title": "Manali Snow Adventure",
+    "customer_name": "Explorer User",
+    "booking_date": "2026-07-03",
+    "price": 15999.0,
+    "status": "Confirmed"
+  },
+  {
+    "id": "TRV-11435",
+    "trip_id": "6995abe10ea1c25e694a5cd8",
+    "trip_title": "Rishikesh Adventure Camp",
+    "customer_name": "Explorer User",
+    "booking_date": "2026-07-03",
+    "price": 5499.0,
+    "status": "Confirmed"
+  },
+  {
+    "id": "TRV-37956",
+    "trip_id": "69878f13f5915890628bac43",
+    "trip_title": "Manali Snow Adventure",
+    "customer_name": "Explorer User",
+    "booking_date": "2026-07-03",
+    "price": 15999.0,
+    "status": "Confirmed"
+  },
+  {
+    "id": "TRV-69323",
+    "trip_id": "69878f13f5915890628bac43",
+    "trip_title": "Manali Snow Adventure",
+    "customer_name": "Explorer User",
+    "booking_date": "2026-07-03",
+    "price": 15999.0,
+    "status": "Confirmed"
+  }
+]

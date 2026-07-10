@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trvios AI - Voice Assistant</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --bg-gradient: linear-gradient(135deg, #0b0f19 0%, #1e1b4b 50%, #0f172a 100%);
+        --primary-glow: rgba(6, 182, 212, 0.4);
+        --secondary-glow: rgba(139, 92, 246, 0.4);
+        --success-glow: rgba(16, 185, 129, 0.4);
+        --listening-glow: rgba(239, 68, 68, 0.4);
+        
+        --text-primary: #f8fafc;
+        --text-secondary: #94a3b8;
+        --glass-bg: rgba(30, 41, 59, 0.45);
+        --glass-border: rgba(255, 255, 255, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+      }
+
+      body {
+        background: var(--bg-gradient);
+        color: var(--text-primary);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        overflow: hidden;
+        position: relative;
+        padding: 24px;
+      }
+
+      /* Ambient Background Glows */
+      .ambient-glow {
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        filter: blur(120px);
+        z-index: 0;
+        opacity: 0.5;
+        pointer-events: none;
+      }
+      .glow-left {
+        top: 20%;
+        left: 10%;
+        background: #06b6d4;
+      }
+      .glow-right {
+        bottom: 20%;
+        right: 10%;
+        background: #8b5cf6;
+      }
+
+      header {
+        text-align: center;
+        z-index: 10;
+        margin-top: 10px;
+      }
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+
+      .logo-icon {
+        width: 24px;
+        height: 24px;
+        fill: #06b6d4;
+      }
+
+      .logo-text {
+        font-weight: 700;
+        font-size: 1.4rem;
+        letter-spacing: 0.5px;
+        background: linear-gradient(to right, #22d3ee, #818cf8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      h1 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+        text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      }
+
+      .subtitle {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        max-width: 500px;
+        margin: 0 auto;
+        line-height: 1.4;
+      }
+
+      /* Glowing Visualizer Orb */
+      .orb-container {
+        position: relative;
+        width: 340px;
+        height: 340px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        cursor: pointer;
+      }
+
+      .orb-ring {
+        position: absolute;
+        border-radius: 50%;
+        transition: all 0.5s ease;
+      }
+
+      .orb-ring-outer {
+        width: 280px;
+        height: 280px;
+        border: 2px dashed rgba(6, 182, 212, 0.25);
+        animation: rotateRing 30s linear infinite;
+      }
+
+      .orb-ring-middle {
+        width: 240px;
+        height: 240px;
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        animation: rotateRing 20s linear infinite reverse;
+      }
+
+      .orb-core {
+        width: 170px;
+        height: 170px;
+        border-radius: 50%;
+        background: radial-gradient(circle, #0891b2 0%, #1e1b4b 100%);
+        box-shadow: 0 0 45px var(--primary-glow);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        z-index: 15;
+      }
+
+      .orb-icon {
+        width: 50px;
+        height: 50px;
+        color: #fff;
+        transition: all 0.3s ease;
+      }
+
+      /* States styling */
+      .state-idle .orb-core {
+        background: radial-gradient(circle, #06b6d4 0%, #0f172a 100%);
+        box-shadow: 0 0 50px var(--primary-glow);
+        animation: pulseIdle 3s infinite ease-in-out;
+      }
+
+      .state-listening .orb-core {
+        background: radial-gradient(circle, #ef4444 0%, #1e1b4b 100%);
+        box-shadow: 0 0 60px var(--listening-glow);
+        transform: scale(1.08);
+      }
+      .state-listening .orb-ring-outer {
+        border-color: rgba(239, 68, 68, 0.4);
+      }
+
+      .state-thinking .orb-core {
+        background: radial-gradient(circle, #8b5cf6 0%, #0f172a 100%);
+        box-shadow: 0 0 60px var(--secondary-glow);
+        animation: pulseThinking 1.5s infinite ease-in-out;
+      }
+      .state-thinking .orb-ring-outer {
+        border: 2px solid rgba(139, 92, 246, 0.5);
+        border-top-color: transparent;
+        animation: rotateRing 1.5s linear infinite;
+      }
+      .state-thinking .orb-ring-middle {
+        border: 2px solid rgba(6, 182, 212, 0.4);
+        border-bottom-color: transparent;
+        animation: rotateRing 1s linear infinite reverse;
+      }
+
+      .state-speaking .orb-core {
+        background: radial-gradient(circle, #10b981 0%, #0f172a 100%);
+        box-shadow: 0 0 65px var(--success-glow);
+        transform: scale(1.05);
+      }
+      .state-speaking .orb-ring-outer {
+        border-color: rgba(16, 185, 129, 0.3);
+      }
+
+      /* Audio Visualizer Canvas */
+      .canvas-visualizer {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 12;
+      }
+
+      /* Visual Status Label */
+      .status-container {
+        text-align: center;
+        z-index: 10;
+        margin-top: -20px;
+      }
+
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        padding: 8px 16px;
+        border-radius: 50px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #06b6d4;
+        transition: all 0.3s ease;
+      }
+      
+      .state-idle .status-dot { background-color: #06b6d4; }
+      .state-listening .status-dot { background-color: #ef4444; animation: flashDot 1s infinite alternate; }
+      .state-thinking .status-dot { background-color: #8b5cf6; }
+      .state-speaking .status-dot { background-color: #10b981; }
+
+      .status-label {
+        font-weight: 500;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+
+      /* Controls Panel */
+      .controls-panel {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(12px);
+        padding: 16px 24px;
+        border-radius: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        align-items: center;
+        z-index: 10;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        max-width: 600px;
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      .control-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      /* Custom Toggle Switch */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #475569;
+        transition: .4s;
+        border-radius: 24px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .slider {
+        background-color: #06b6d4;
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(20px);
+      }
+
+      .control-label {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #cbd5e1;
+        cursor: pointer;
+      }
+
+      .btn {
+        background: #1e293b;
+        color: #fff;
+        border: 1px solid rgba(255,255,255,0.08);
+        padding: 8px 16px;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s ease;
+      }
+
+      .btn:hover {
+        background: #334155;
+        border-color: rgba(255,255,255,0.15);
+      }
+
+      .btn-exit {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        border: 1px solid rgba(6,182,212,0.2);
+        color: #22d3ee;
+      }
+      
+      .btn-exit:hover {
+        background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+        color: #67e8f9;
+        box-shadow: 0 0 15px rgba(6,182,212,0.25);
+      }
+
+      /* Conversation History Overlay Drawer */
+      .transcript-drawer {
+        position: fixed;
+        bottom: -320px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 48px);
+        max-width: 600px;
+        height: 300px;
+        background: rgba(15, 23, 42, 0.92);
+        border: 1px solid var(--glass-border);
+        border-bottom: none;
+        border-radius: 24px 24px 0 0;
+        backdrop-filter: blur(16px);
+        box-shadow: 0 -8px 32px rgba(0,0,0,0.4);
+        z-index: 30;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .transcript-drawer.active {
+        bottom: 0;
+      }
+
+      .drawer-header {
+        padding: 12px 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .drawer-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #94a3b8;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .drawer-close {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        font-size: 1.5rem;
+        cursor: pointer;
+        line-height: 1;
+      }
+
+      .drawer-body {
+        flex: 1;
+        padding: 16px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        font-size: 0.92rem;
+      }
+
+      .log-bubble {
+        padding: 10px 14px;
+        border-radius: 14px;
+        max-width: 85%;
+        line-height: 1.4;
+      }
+
+      .log-bubble.user {
+        background: rgba(6, 182, 212, 0.15);
+        border: 1px solid rgba(6, 182, 212, 0.2);
+        align-self: flex-end;
+        color: #22d3ee;
+      }
+
+      .log-bubble.assistant {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        align-self: flex-start;
+      }
+
+      /* Animations */
+      @keyframes rotateRing {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      @keyframes pulseIdle {
+        0%, 100% {
+          transform: scale(1);
+          box-shadow: 0 0 45px var(--primary-glow);
+        }
+        50% {
+          transform: scale(0.97);
+          box-shadow: 0 0 30px rgba(6, 182, 212, 0.2);
+        }
+      }
+
+      @keyframes pulseThinking {
+        0%, 100% {
+          box-shadow: 0 0 50px var(--secondary-glow);
+        }
+        50% {
+          box-shadow: 0 0 25px rgba(139, 92, 246, 0.25);
+        }
+      }
+
+      @keyframes flashDot {
+        from { opacity: 0.3; }
+        to { opacity: 1; }
+      }
+
+      /* Hide element helper */
+      .hidden {
+        display: none !important;
+      }
+
+      @media(max-width: 480px) {
+        h1 {
+          font-size: 1.8rem;
+        }
+        .orb-container {
+          width: 280px;
+          height: 280px;
+        }
+        .orb-ring-outer {
+          width: 240px;
+          height: 240px;
+        }
+        .orb-ring-middle {
+          width: 210px;
+          height: 210px;
+        }
+        .orb-core {
+          width: 140px;
+          height: 140px;
+        }
+      }
+    </style>
+  </head>
+  <body class="state-idle" id="voice-body">
+    <!-- Ambient Light Decorators -->
+    <div class="ambient-glow glow-left"></div>
+    <div class="ambient-glow glow-right"></div>
+
+    <header>
+      <div class="logo-container">
+        <svg class="logo-icon" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+        </svg>
+        <span class="logo-text">Trvios AI</span>
+      </div>
+      <h1>Voice Assistant</h1>
+      <p class="subtitle">A complete two-way voice experience. Ask about tours, budget deals, split bills tool, or partner support using your voice.</p>
+    </header>
+
+    <!-- Glowing Interactive Waveform/Orb -->
+    <div class="orb-container" id="orb-trigger">
+      <div class="orb-ring orb-ring-outer"></div>
+      <div class="orb-ring orb-ring-middle"></div>
+      <canvas class="canvas-visualizer" id="canvas-visualizer"></canvas>
+      <div class="orb-core">
+        <svg class="orb-icon" viewBox="0 0 24 24" id="mic-icon">
+          <!-- Mic outline icon -->
+          <path fill="currentColor" d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+        </svg>
+        <svg class="orb-icon hidden" viewBox="0 0 24 24" id="playing-icon">
+          <!-- Speaker icon -->
+          <path fill="currentColor" d="M8 9H5v6h3l4 4V5L8 9zm11 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM16.5 3v2.02c2.73.78 4.5 3.3 4.5 6.1s-1.77 5.32-4.5 6.1v2.02c3.84-.82 7-4.14 7-8.12s-3.16-7.3-7-8.12z"/>
+        </svg>
+        <svg class="orb-icon hidden" viewBox="0 0 24 24" id="thinking-icon">
+          <!-- Spinning animation or loading icon -->
+          <path fill="currentColor" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity=".2"/>
+          <path fill="currentColor" d="M12 4a8 8 0 0 1 7.89 6.7A1 1 0 1 0 21.85 10A10 10 0 0 0 12 2a1 1 0 0 0 0 2Z"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Active State Label -->
+    <div class="status-container">
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        <span class="status-label" id="status-label">Tap to Speak</span>
+      </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="controls-panel">
+      <div class="control-item">
+        <label class="switch">
+          <input type="checkbox" id="auto-listen-toggle" checked />
+          <span class="slider"></span>
+        </label>
+        <label for="auto-listen-toggle" class="control-label">Auto-Listen (Hands-Free)</label>
+      </div>
+
+      <button type="button" class="btn" id="toggle-log-btn">
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="8" y1="6" x2="21" y2="6"></line>
+          <line x1="8" y1="12" x2="21" y2="12"></line>
+          <line x1="8" y1="18" x2="21" y2="18"></line>
+          <line x1="3" y1="6" x2="3.01" y2="6"></line>
+          <line x1="3" y1="12" x2="3.01" y2="12"></line>
+          <line x1="3" y1="18" x2="3.01" y2="18"></line>
+        </svg>
+        Transcript Log
+      </button>
+
+      <button type="button" class="btn btn-exit" id="exit-btn">
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        Exit Voice Mode
+      </button>
+    </div>
+
+    <!-- Transcript Log Drawer Overlay -->
+    <div class="transcript-drawer" id="transcript-drawer">
+      <div class="drawer-header">
+        <div class="drawer-title">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="color:#06b6d4;">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          Conversation Transcript
+        </div>
+        <button type="button" class="drawer-close" id="close-log-btn">&times;</button>
+      </div>
+      <div class="drawer-body" id="drawer-body">
+        <div class="log-bubble assistant">Hello! I am your Trvios Voice Assistant. Speak anytime to ask about our travel packages, budget trips, become a partner portal, or the split bills tool!</div>
+      </div>
+    </div>
+
+    <!-- Sound Effects for UX (Chime on listen, stop, think etc) -->
+    <audio id="sound-chime-start" src="data:audio/wav;base64,UklGRjIAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA="></audio>
+
+    <script src="/voice_app.js" type="module"></script>
+  </body>
+</html>

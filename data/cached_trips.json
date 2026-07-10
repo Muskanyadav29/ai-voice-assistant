@@ -1,0 +1,1215 @@
+{
+  "success": true,
+  "count": 13,
+  "data": [
+    {
+      "_id": "69878f13f5915890628bac43",
+      "title": "Manali Snow Adventure",
+      "bannerImage": "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/7773e37a-d12f-4d6d-a2cc-f0cbfa6aa21e.webp",
+      "images": [
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/2b20292a-0999-456c-b295-987d5dda7dcb.webp",
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/5aae560d-942d-4358-bf49-468ded06e122.webp",
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/f2f52692-0e04-4475-a2d0-8b3f7849dd1b.webp"
+      ],
+      "destination": "Manali",
+      "duration": "5 Days / 4 Nights",
+      "price": 18999,
+      "discountPrice": 15999,
+      "bookingAccess": "open",
+      "tripTags": [],
+      "difficulty": "easy",
+      "highlights": [
+        "Solang Valley snow activities",
+        "Rohtang Pass excursion",
+        "Old Manali cafes",
+        "Mall Road shopping"
+      ],
+      "tags": [
+        "Mountains",
+        "Adventurous",
+        "Mountains & Treks"
+      ],
+      "seasons": [
+        "Winter Wonderland"
+      ],
+      "cities": [
+        "Manali"
+      ],
+      "states": [
+        "Himachal Pradesh"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Arrival in Manali",
+          "description": "Arrival, hotel check-in, and evening Mall Road visit.",
+          "activities": [
+            "Hotel check-in",
+            "Mall Road walk"
+          ],
+          "location": {
+            "formattedAddress": "Manali, HP",
+            "latitude": 32.2396,
+            "longitude": 77.1887
+          },
+          "_id": "69878f13f5915890628bac44"
+        },
+        {
+          "day": 2,
+          "title": "Solang Valley Adventure",
+          "description": "Snow activities and sightseeing.",
+          "activities": [
+            "Paragliding",
+            "Snow scooter",
+            "Cable car"
+          ],
+          "location": {
+            "formattedAddress": "Solang Valley",
+            "latitude": 32.3166,
+            "longitude": 77.157
+          },
+          "_id": "69878f13f5915890628bac45"
+        },
+        {
+          "day": 3,
+          "title": "Rohtang Pass Visit",
+          "description": "High-altitude scenic drive.",
+          "activities": [
+            "Snow play",
+            "Photography"
+          ],
+          "location": {
+            "formattedAddress": "Rohtang Pass",
+            "latitude": 32.3736,
+            "longitude": 77.246
+          },
+          "_id": "69878f13f5915890628bac46"
+        },
+        {
+          "day": 4,
+          "title": "Old Manali Exploration",
+          "description": "Cafes and temples.",
+          "activities": [
+            "Hadimba Temple",
+            "Cafe hopping"
+          ],
+          "location": {
+            "formattedAddress": "Old Manali",
+            "latitude": 32.2432,
+            "longitude": 77.1892
+          },
+          "_id": "69878f13f5915890628bac47"
+        },
+        {
+          "day": 5,
+          "title": "Departure",
+          "description": "Checkout and return journey.",
+          "activities": [
+            "Hotel checkout",
+            "Transfer"
+          ],
+          "location": {
+            "formattedAddress": "Manali Bus Stand",
+            "latitude": 32.243,
+            "longitude": 77.189
+          },
+          "_id": "69878f13f5915890628bac48"
+        }
+      ],
+      "popularityScore": 0,
+      "rating": 0
+    },
+    {
+      "_id": "6987918bf5915890628bac57",
+      "title": "Shimla Hill Retreat",
+      "bannerImage": "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/6e6d4cd9-3879-4639-b98c-fbe98ecc789c.webp",
+      "images": [
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/00f325ba-5978-4070-ad3c-3e676f4d6ea1.webp",
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/cf38913c-4e0f-4dc1-93cc-faa13a76c674.webp",
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/a81450b2-93f9-4eda-bd92-0b28eb4e5e78.webp"
+      ],
+      "destination": "Shimla",
+      "duration": "4 Days / 3 Nights",
+      "price": 13999,
+      "discountPrice": 11499,
+      "bookingAccess": "open",
+      "tripTags": [],
+      "difficulty": "easy",
+      "highlights": [
+        "Mall Road walk",
+        "Toy Train experience",
+        "Kufri visit",
+        "Jakhoo Temple"
+      ],
+      "tags": [
+        "Mountains",
+        "Relaxing",
+        "Hill Stations"
+      ],
+      "seasons": [
+        "Summer Hills"
+      ],
+      "cities": [
+        "Shimla"
+      ],
+      "states": [
+        "Himachal Pradesh"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Arrival in Shimla",
+          "description": "Hotel check-in and Mall Road exploration.",
+          "activities": [
+            "Hotel check-in",
+            "Mall Road visit"
+          ],
+          "location": {
+            "formattedAddress": "Shimla",
+            "latitude": 31.1048,
+            "longitude": 77.1734
+          },
+          "_id": "6987918bf5915890628bac58"
+        },
+        {
+          "day": 2,
+          "title": "Kufri Excursion",
+          "description": "Snow and scenic valley views.",
+          "activities": [
+            "Horse riding",
+            "Photography"
+          ],
+          "location": {
+            "formattedAddress": "Kufri",
+            "latitude": 31.0978,
+            "longitude": 77.2674
+          },
+          "_id": "6987918bf5915890628bac59"
+        },
+        {
+          "day": 3,
+          "title": "Local Sightseeing",
+          "description": "Temple visit and toy train ride.",
+          "activities": [
+            "Jakhoo Temple",
+            "Toy train"
+          ],
+          "location": {
+            "formattedAddress": "Jakhoo Temple",
+            "latitude": 31.106,
+            "longitude": 77.183
+          },
+          "_id": "6987918bf5915890628bac5a"
+        },
+        {
+          "day": 4,
+          "title": "Departure",
+          "description": "Checkout and return journey.",
+          "activities": [
+            "Checkout"
+          ],
+          "location": {
+            "formattedAddress": "Shimla Bus Stand",
+            "latitude": 31.1048,
+            "longitude": 77.1734
+          },
+          "_id": "6987918bf5915890628bac5b"
+        }
+      ],
+      "popularityScore": 0,
+      "rating": 0
+    },
+    {
+      "_id": "698791a2f5915890628bac5d",
+      "title": "Spiritual Varanasi Journey",
+      "bannerImage": "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/b5284340-0912-44e3-beaf-dbf42d081751.webp",
+      "images": [
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/def334cc-8292-49f4-b250-960c10596881.webp",
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/ca466b02-5975-4e8e-bb22-6c8bfee8a703.webp",
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/aa46d8e4-834e-490e-a511-c759c0ffabe1.webp"
+      ],
+      "destination": "Varanasi",
+      "duration": "3 Days / 2 Nights",
+      "price": 9999,
+      "discountPrice": 8499,
+      "bookingAccess": "open",
+      "tripTags": [],
+      "difficulty": "easy",
+      "highlights": [
+        "Ganga Aarti",
+        "Boat ride",
+        "Kashi Vishwanath Temple",
+        "Old city walk"
+      ],
+      "tags": [
+        "Pilgrimage",
+        "Spiritual",
+        "Countryside & Villages"
+      ],
+      "seasons": [
+        "Spring Blossoms"
+      ],
+      "cities": [
+        "Varanasi"
+      ],
+      "states": [
+        "Uttar Pradesh"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Arrival & Ganga Aarti",
+          "description": "Temple visit and evening Aarti.",
+          "activities": [
+            "Temple visit",
+            "Ganga Aarti"
+          ],
+          "location": {
+            "formattedAddress": "Dashashwamedh Ghat",
+            "latitude": 25.3068,
+            "longitude": 83.0105
+          },
+          "_id": "698791a2f5915890628bac5e"
+        },
+        {
+          "day": 2,
+          "title": "Boat Ride & City Tour",
+          "description": "Morning boat ride and temple exploration.",
+          "activities": [
+            "Boat ride",
+            "Temple visits"
+          ],
+          "location": {
+            "formattedAddress": "Ganga River",
+            "latitude": 25.3068,
+            "longitude": 83.0105
+          },
+          "_id": "698791a2f5915890628bac5f"
+        },
+        {
+          "day": 3,
+          "title": "Departure",
+          "description": "Checkout and departure.",
+          "activities": [
+            "Checkout"
+          ],
+          "location": {
+            "formattedAddress": "Varanasi Station",
+            "latitude": 25.326,
+            "longitude": 82.987
+          },
+          "_id": "698791a2f5915890628bac60"
+        }
+      ],
+      "popularityScore": 0,
+      "rating": 0
+    },
+    {
+      "_id": "698791b6f5915890628bac62",
+      "title": "Udaipur Lakes & Palaces",
+      "bannerImage": "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/b7427dde-f8a1-4c0b-b0e4-4f4d6c76ffe0.webp",
+      "images": [
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/f90ad25b-8d28-4298-bbc9-de6ddb6750f5.webp",
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/c1572fdd-c30b-44f1-a179-28a28a30cdb2.webp",
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/fda7bf01-21af-4e32-addf-d04a48678089.webp"
+      ],
+      "destination": "Udaipur",
+      "duration": "4 Days / 3 Nights",
+      "price": 14999,
+      "discountPrice": 12499,
+      "bookingAccess": "open",
+      "tripTags": [],
+      "difficulty": "easy",
+      "highlights": [
+        "City Palace",
+        "Lake Pichola boat ride",
+        "Jag Mandir",
+        "Cultural show"
+      ],
+      "tags": [
+        "Culture & Heritage",
+        "Romantic",
+        "Lakes & Waterfalls"
+      ],
+      "seasons": [
+        "Festival Season"
+      ],
+      "cities": [
+        "Udaipur"
+      ],
+      "states": [
+        "Rajasthan"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Arrival & Lake View",
+          "description": "Hotel check-in and evening lake visit.",
+          "activities": [
+            "Check-in",
+            "Lake visit"
+          ],
+          "location": {
+            "formattedAddress": "Udaipur",
+            "latitude": 24.5854,
+            "longitude": 73.7125
+          },
+          "_id": "698791b6f5915890628bac63"
+        },
+        {
+          "day": 2,
+          "title": "City Palace Tour",
+          "description": "Explore royal palaces.",
+          "activities": [
+            "City Palace",
+            "Museum visit"
+          ],
+          "location": {
+            "formattedAddress": "City Palace",
+            "latitude": 24.576,
+            "longitude": 73.683
+          },
+          "_id": "698791b6f5915890628bac64"
+        },
+        {
+          "day": 3,
+          "title": "Boat Ride & Jag Mandir",
+          "description": "Boat ride in Lake Pichola.",
+          "activities": [
+            "Boat ride",
+            "Jag Mandir visit"
+          ],
+          "location": {
+            "formattedAddress": "Lake Pichola",
+            "latitude": 24.575,
+            "longitude": 73.682
+          },
+          "_id": "698791b6f5915890628bac65"
+        },
+        {
+          "day": 4,
+          "title": "Departure",
+          "description": "Checkout and departure.",
+          "activities": [
+            "Checkout"
+          ],
+          "location": {
+            "formattedAddress": "Udaipur Station",
+            "latitude": 24.571,
+            "longitude": 73.691
+          },
+          "_id": "698791b6f5915890628bac66"
+        }
+      ],
+      "popularityScore": 35.8,
+      "rating": 0
+    },
+    {
+      "_id": "69879272f5915890628bac68",
+      "title": "Agra Heritage Weekend",
+      "bannerImage": "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/0b7763da-4ee6-484b-9164-d73069e4a26a.webp",
+      "images": [
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/8ab28107-d9e2-4b06-be33-b6acb26c9384.webp",
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/f0915332-b820-4130-ac4e-4a02aac250a7.webp",
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/97feb8ec-c642-4b9e-9122-7c13caf205cd.webp"
+      ],
+      "destination": "Agra",
+      "duration": "2 Days / 1 Nights",
+      "price": 6999,
+      "discountPrice": 5499,
+      "bookingAccess": "open",
+      "tripTags": [],
+      "difficulty": "easy",
+      "highlights": [
+        "Taj Mahal sunrise",
+        "Agra Fort",
+        "Mehtab Bagh"
+      ],
+      "tags": [
+        "Culture & Heritage",
+        "Cultural",
+        "Countryside & Villages"
+      ],
+      "seasons": [
+        "Spring Blossoms"
+      ],
+      "cities": [
+        "Agra"
+      ],
+      "states": [
+        "Uttar Pradesh"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Arrival & Taj Mahal",
+          "description": "Explore Taj Mahal and Agra Fort.",
+          "activities": [
+            "Taj Mahal visit",
+            "Agra Fort"
+          ],
+          "location": {
+            "formattedAddress": "Agra",
+            "latitude": 27.1767,
+            "longitude": 78.0081
+          },
+          "_id": "69879272f5915890628bac69"
+        },
+        {
+          "day": 2,
+          "title": "Mehtab Bagh & Departure",
+          "description": "Garden visit and return.",
+          "activities": [
+            "Mehtab Bagh",
+            "Checkout"
+          ],
+          "location": {
+            "formattedAddress": "Agra",
+            "latitude": 27.179,
+            "longitude": 78.021
+          },
+          "_id": "69879272f5915890628bac6a"
+        }
+      ],
+      "popularityScore": 0,
+      "rating": 0
+    },
+    {
+      "_id": "69879287f5915890628bac6c",
+      "title": "Mumbai City Explorer",
+      "bannerImage": "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/bfd84a93-0676-4d23-a537-07c9ad5b9d70.webp",
+      "images": [
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/84ee2635-adcf-476d-b982-f8a6ea06d6e0.webp",
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/af0bba7a-cba5-4a32-a008-8ed3e3e9fd97.webp",
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/fbe1cb02-f122-4336-8c2a-aa71fec43e94.webp"
+      ],
+      "destination": "Mumbai",
+      "duration": "3 Days / 2 Nights",
+      "price": 12999,
+      "discountPrice": 10499,
+      "bookingAccess": "open",
+      "tripTags": [],
+      "difficulty": "easy",
+      "highlights": [
+        "Gateway of India",
+        "Marine Drive",
+        "Colaba"
+      ],
+      "tags": [
+        "City Life",
+        "Party & Nightlife",
+        "Countryside & Villages"
+      ],
+      "seasons": [
+        "Summer Hills"
+      ],
+      "cities": [
+        "Mumbai"
+      ],
+      "states": [
+        "Maharashtra"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "South Mumbai Tour",
+          "description": "Explore iconic landmarks.",
+          "activities": [
+            "Gateway of India",
+            "Colaba"
+          ],
+          "location": {
+            "formattedAddress": "Mumbai",
+            "latitude": 18.9217,
+            "longitude": 72.8347
+          },
+          "_id": "69879287f5915890628bac6d"
+        },
+        {
+          "day": 2,
+          "title": "City Tour",
+          "description": "Marine Drive and temples.",
+          "activities": [
+            "Marine Drive",
+            "Siddhivinayak Temple"
+          ],
+          "location": {
+            "formattedAddress": "Marine Drive",
+            "latitude": 18.944,
+            "longitude": 72.823
+          },
+          "_id": "69879287f5915890628bac6e"
+        },
+        {
+          "day": 3,
+          "title": "Departure",
+          "description": "Shopping and return.",
+          "activities": [
+            "Shopping",
+            "Checkout"
+          ],
+          "location": {
+            "formattedAddress": "Mumbai",
+            "latitude": 19.076,
+            "longitude": 72.8777
+          },
+          "_id": "69879287f5915890628bac6f"
+        }
+      ],
+      "popularityScore": 0,
+      "rating": 0
+    },
+    {
+      "_id": "6987929ff5915890628bac71",
+      "title": "Mysore Royal Heritage Tour",
+      "bannerImage": "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/52a1851c-947d-44f0-a1cb-e0c05df0f9e0.webp",
+      "images": [
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/6fb9e6ff-8536-4350-82d7-ee049b39297d.webp",
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/a88846fe-28cd-4505-8cfc-bbd4908dc631.webp",
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/752c5272-36a4-4ada-9c13-0e92f3f3f64e.webp"
+      ],
+      "destination": "Mysore",
+      "duration": "3 Days / 2 Nights",
+      "price": 10999,
+      "discountPrice": 8999,
+      "bookingAccess": "open",
+      "tripTags": [],
+      "difficulty": "easy",
+      "highlights": [
+        "Mysore Palace",
+        "Chamundi Hill",
+        "Brindavan Gardens"
+      ],
+      "tags": [
+        "Culture & Heritage",
+        "Cultural",
+        "Countryside & Villages"
+      ],
+      "seasons": [
+        "Festival Season"
+      ],
+      "cities": [
+        "Mysore"
+      ],
+      "states": [
+        "Karnataka"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Arrival & Palace Visit",
+          "description": "Explore Mysore Palace.",
+          "activities": [
+            "Palace visit"
+          ],
+          "location": {
+            "formattedAddress": "Mysore",
+            "latitude": 12.3052,
+            "longitude": 76.6551
+          },
+          "_id": "6987929ff5915890628bac72"
+        },
+        {
+          "day": 2,
+          "title": "Hill & Gardens",
+          "description": "Temple and garden visit.",
+          "activities": [
+            "Chamundi Hill",
+            "Brindavan Gardens"
+          ],
+          "location": {
+            "formattedAddress": "Chamundi Hill",
+            "latitude": 12.272,
+            "longitude": 76.67
+          },
+          "_id": "6987929ff5915890628bac73"
+        },
+        {
+          "day": 3,
+          "title": "Departure",
+          "description": "Return journey.",
+          "activities": [
+            "Checkout"
+          ],
+          "location": {
+            "formattedAddress": "Mysore Station",
+            "latitude": 12.307,
+            "longitude": 76.648
+          },
+          "_id": "6987929ff5915890628bac74"
+        }
+      ],
+      "popularityScore": 0,
+      "rating": 0
+    },
+    {
+      "_id": "698792d8f5915890628bac76",
+      "title": "Delhi Culture & Heritage Tour",
+      "bannerImage": "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/5cde0a7a-41e6-4226-83c5-ac742b01f7b4.webp",
+      "images": [
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/0c780ab7-70d2-478e-802b-da095b5d00d5.webp",
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/1e595bec-ed54-4b91-a697-9033e134d01a.webp",
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/1fbf9af1-00a1-4966-bfd4-dd8847742523.webp"
+      ],
+      "destination": "Delhi",
+      "duration": "3 Days / 2 Nights",
+      "price": 11999,
+      "discountPrice": 9499,
+      "bookingAccess": "open",
+      "tripTags": [],
+      "difficulty": "easy",
+      "highlights": [
+        "India Gate",
+        "Red Fort",
+        "Qutub Minar",
+        "Chandni Chowk food walk"
+      ],
+      "tags": [
+        "Culture & Heritage",
+        "Cultural",
+        "Countryside & Villages"
+      ],
+      "seasons": [
+        "Festival Season"
+      ],
+      "cities": [
+        "Delhi"
+      ],
+      "states": [
+        "Delhi"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Old Delhi Tour",
+          "description": "Red Fort and Chandni Chowk.",
+          "activities": [
+            "Red Fort",
+            "Street food walk"
+          ],
+          "location": {
+            "formattedAddress": "Old Delhi",
+            "latitude": 28.6562,
+            "longitude": 77.241
+          },
+          "_id": "698792d8f5915890628bac77"
+        },
+        {
+          "day": 2,
+          "title": "New Delhi Landmarks",
+          "description": "Monuments and markets.",
+          "activities": [
+            "India Gate",
+            "Qutub Minar"
+          ],
+          "location": {
+            "formattedAddress": "India Gate",
+            "latitude": 28.6129,
+            "longitude": 77.2295
+          },
+          "_id": "698792d8f5915890628bac78"
+        },
+        {
+          "day": 3,
+          "title": "Departure",
+          "description": "Shopping and return.",
+          "activities": [
+            "Connaught Place visit",
+            "Checkout"
+          ],
+          "location": {
+            "formattedAddress": "Connaught Place",
+            "latitude": 28.6315,
+            "longitude": 77.2167
+          },
+          "_id": "698792d8f5915890628bac79"
+        }
+      ],
+      "popularityScore": 7.3,
+      "rating": 0
+    },
+    {
+      "_id": "698792e6f5915890628bac7b",
+      "title": "Hyderabad Food & Heritage Trail",
+      "bannerImage": "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/7a09c890-50f2-4486-97fb-db80e2129450.webp",
+      "images": [
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/c3c543e6-eff5-4fbd-ae48-0fa20c0fe3ab.webp",
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/adbbd04b-27de-46e9-88b3-2d3373f4c6d5.webp"
+      ],
+      "destination": "Hyderabad",
+      "duration": "3 Days / 2 Nights",
+      "price": 12999,
+      "discountPrice": 10499,
+      "bookingAccess": "open",
+      "tripTags": [],
+      "difficulty": "easy",
+      "highlights": [
+        "Charminar",
+        "Golconda Fort",
+        "Biryani food walk",
+        "Ramoji Film City"
+      ],
+      "tags": [
+        "Food & Culinary",
+        "Cultural",
+        "Countryside & Villages"
+      ],
+      "seasons": [
+        "Festival Season"
+      ],
+      "cities": [
+        "Hyderabad"
+      ],
+      "states": [
+        "Telangana"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Old City Tour",
+          "description": "Charminar and food walk.",
+          "activities": [
+            "Charminar visit",
+            "Food tour"
+          ],
+          "location": {
+            "formattedAddress": "Charminar",
+            "latitude": 17.3616,
+            "longitude": 78.4747
+          },
+          "_id": "698792e6f5915890628bac7c"
+        },
+        {
+          "day": 2,
+          "title": "Fort & Film City",
+          "description": "Explore Golconda Fort.",
+          "activities": [
+            "Golconda Fort",
+            "Ramoji Film City"
+          ],
+          "location": {
+            "formattedAddress": "Golconda Fort",
+            "latitude": 17.3833,
+            "longitude": 78.4011
+          },
+          "_id": "698792e6f5915890628bac7d"
+        },
+        {
+          "day": 3,
+          "title": "Departure",
+          "description": "Shopping and return.",
+          "activities": [
+            "Local shopping",
+            "Checkout"
+          ],
+          "location": {
+            "formattedAddress": "Hyderabad",
+            "latitude": 17.385,
+            "longitude": 78.4867
+          },
+          "_id": "698792e6f5915890628bac7e"
+        }
+      ],
+      "popularityScore": 0,
+      "rating": 0
+    },
+    {
+      "_id": "69879317f5915890628bac80",
+      "title": "Jaipur Weekend Heritage Trip",
+      "bannerImage": "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/25e22117-4f0d-4d26-ac95-3ae7bd5cd8eb.webp",
+      "images": [
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/84ba745a-3ffa-485c-8813-ecefedcf27ec.webp",
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/0a3c9f87-10ca-403e-9d19-a91574da595f.webp"
+      ],
+      "destination": "Jaipur",
+      "duration": "3 Days / 2 Nights",
+      "price": 11999,
+      "discountPrice": 9499,
+      "bookingAccess": "open",
+      "tripTags": [],
+      "difficulty": "easy",
+      "highlights": [
+        "Amber Fort",
+        "City Palace",
+        "Hawa Mahal",
+        "Local bazaar shopping"
+      ],
+      "tags": [
+        "Culture & Heritage",
+        "Cultural",
+        "Desert & Dunes"
+      ],
+      "seasons": [
+        "Backwater Bliss"
+      ],
+      "cities": [
+        "Jaipur"
+      ],
+      "states": [
+        "Rajasthan"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Arrival & Local Markets",
+          "description": "Check-in and explore Jaipur markets.",
+          "activities": [
+            "Hotel check-in",
+            "Bazaar visit"
+          ],
+          "location": {
+            "formattedAddress": "Jaipur",
+            "latitude": 26.9124,
+            "longitude": 75.7873
+          },
+          "_id": "69879317f5915890628bac81"
+        },
+        {
+          "day": 2,
+          "title": "Fort & Palace Tour",
+          "description": "Explore Amber Fort and City Palace.",
+          "activities": [
+            "Amber Fort",
+            "City Palace",
+            "Hawa Mahal"
+          ],
+          "location": {
+            "formattedAddress": "Amber Fort",
+            "latitude": 26.9855,
+            "longitude": 75.8513
+          },
+          "_id": "69879317f5915890628bac82"
+        },
+        {
+          "day": 3,
+          "title": "Departure",
+          "description": "Breakfast and return.",
+          "activities": [
+            "Checkout"
+          ],
+          "location": {
+            "formattedAddress": "Jaipur Station",
+            "latitude": 26.9124,
+            "longitude": 75.7873
+          },
+          "_id": "69879317f5915890628bac83"
+        }
+      ],
+      "popularityScore": 0,
+      "rating": 0
+    },
+    {
+      "_id": "6987932af5915890628bac8d",
+      "title": "Rishikesh Adventure Camp",
+      "bannerImage": "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/71272c4e-4f50-49d4-acef-17f2b856926a.webp",
+      "images": [
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/71c47de7-fddf-49f4-a790-fbe46b8cb88f.webp",
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/f51b76c2-c057-45ef-b890-37a8f1053ed6.webp",
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/6729116f-6358-4fed-b068-83cbc87a5a7c.webp",
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/a39b9c53-c9e4-4bbb-889b-e38007f39620.webp"
+      ],
+      "destination": "Rishikesh",
+      "duration": "2 Days / 1 Nights",
+      "price": 6999,
+      "discountPrice": 5499,
+      "bookingAccess": "open",
+      "tripTags": [],
+      "difficulty": "easy",
+      "highlights": [
+        "River rafting",
+        "Camping",
+        "Bonfire",
+        "Ganga Aarti"
+      ],
+      "tags": [
+        "Adventure",
+        "Adventurous",
+        "Wildlife & Safari"
+      ],
+      "seasons": [
+        "Summer Hills"
+      ],
+      "cities": [
+        "Rishikesh"
+      ],
+      "states": [
+        "Uttarakhand"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Arrival & Camping",
+          "description": "Camp check-in and bonfire.",
+          "activities": [
+            "Camp stay",
+            "Bonfire"
+          ],
+          "location": {
+            "formattedAddress": "Rishikesh",
+            "latitude": 30.0869,
+            "longitude": 78.2676
+          },
+          "_id": "6987932af5915890628bac8e"
+        },
+        {
+          "day": 2,
+          "title": "Rafting & Departure",
+          "description": "River rafting session.",
+          "activities": [
+            "Rafting",
+            "Checkout"
+          ],
+          "location": {
+            "formattedAddress": "Ganga River",
+            "latitude": 30.0869,
+            "longitude": 78.2676
+          },
+          "_id": "6987932af5915890628bac8f"
+        }
+      ],
+      "popularityScore": 2,
+      "rating": 0
+    },
+    {
+      "_id": "6995abe10ea1c25e694a5cd8",
+      "title": "Rishikesh Adventure Camp",
+      "bannerImage": "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/3a24b5c1-a5a2-4492-9c3e-90ec97a5d149.webp",
+      "images": [
+        "https://mrproptekbucket-prod.s3.amazonaws.com/images/thumb/7058d0fd-1042-458b-84dd-fabd0b904fb0.webp"
+      ],
+      "destination": "Rishikesh",
+      "duration": "2 Days / 1 Nights",
+      "price": 6999,
+      "discountPrice": 5499,
+      "bookingAccess": "open",
+      "tripTags": [],
+      "difficulty": "easy",
+      "highlights": [
+        "River rafting",
+        "Camping",
+        "Bonfire",
+        "Ganga Aarti"
+      ],
+      "tags": [
+        "Adventure",
+        "Adventurous",
+        "Wildlife & Safari"
+      ],
+      "seasons": [
+        "Summer Hills"
+      ],
+      "cities": [
+        "Rishikesh"
+      ],
+      "states": [
+        "Uttarakhand"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Arrival & Camping",
+          "description": "Camp check-in followed by relaxation near the river and an evening bonfire experience.",
+          "activities": [
+            "Camp check-in",
+            "Relax by riverside",
+            "Bonfire & music",
+            "Dinner at campsite"
+          ],
+          "location": {
+            "formattedAddress": "Rishikesh",
+            "latitude": 30.0869,
+            "longitude": 78.2676
+          },
+          "_id": "6995abe10ea1c25e694a5cd9"
+        },
+        {
+          "day": 2,
+          "title": "River Rafting & Departure",
+          "description": "Enjoy an exciting river rafting session in the Ganga followed by checkout and departure.",
+          "activities": [
+            "Breakfast at camp",
+            "River rafting session",
+            "Camp checkout",
+            "Departure"
+          ],
+          "location": {
+            "formattedAddress": "Ganga River, Rishikesh",
+            "latitude": 30.0869,
+            "longitude": 78.2676
+          },
+          "_id": "6995abe10ea1c25e694a5cda"
+        }
+      ],
+      "popularityScore": 0,
+      "rating": 0
+    },
+    {
+      "_id": "6a4d26fd2849ab804673dc72",
+      "title": "Enchanting Darjeeling Escape",
+      "bannerImage": "https://trvios-assets.s3.amazonaws.com/images/thumb/910ec9ea-919b-49ba-9e97-863d79bb2fa4.webp",
+      "images": [
+        "https://trvios-assets.s3.amazonaws.com/images/thumb/e78e7dab-8ba6-4195-b14e-abdc5f4b5f8f.webp",
+        "https://trvios-assets.s3.amazonaws.com/images/thumb/b625f95a-131d-46cf-8d84-2f73b09c1465.webp"
+      ],
+      "destination": "Darjeeling, India",
+      "duration": "4 Days / 3 Nights",
+      "price": 16999,
+      "discountPrice": 14999,
+      "pricing": {
+        "currency": "INR",
+        "basePrice": 16999,
+        "discountPrice": 14999,
+        "priceIncludesTax": true,
+        "gstPercent": 0,
+        "taxAmount": 0,
+        "finalPrice": 14999
+      },
+      "bookingAccess": "open",
+      "tripTags": [],
+      "difficulty": "easy",
+      "highlights": [
+        "Witness the breathtaking sunrise over Kanchenjunga from Tiger Hill",
+        "Experience the UNESCO World Heritage Darjeeling Himalayan Toy Train",
+        "Explore the iconic Batasia Loop and Ghoom Monastery",
+        "Visit the famous Happy Valley Tea Estate with tea tasting",
+        "Enjoy panoramic Himalayan views from the Japanese Peace Pagoda",
+        "Discover the Himalayan Mountaineering Institute & Himalayan Zoo",
+        "Stroll through the lively Mall Road and Chowrasta Market",
+        "Scenic excursion to the beautiful Mirik Lake and Pine Forest",
+        "Comfortable private transfers with experienced local driver",
+        "Stay in carefully selected premium mountain-view hotels"
+      ],
+      "tags": [
+        "Mountains",
+        "Honeymoon",
+        "Nature",
+        "Adventure",
+        "Romantic",
+        "Relaxing",
+        "Adventurous",
+        "Hill Stations"
+      ],
+      "seasons": [
+        "Monsoon Magic",
+        "Spring Blossoms"
+      ],
+      "cities": [
+        "Darjeeling"
+      ],
+      "states": [
+        "West Bengal"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Arrival at Bagdogra/NJP – Scenic Drive to Darjeeling & Leisure Evening",
+          "description": "Welcome to the Queen of the Hills! Upon arrival at Bagdogra Airport (IXB) or New Jalpaiguri Railway Station (NJP), meet your driver and begin a scenic drive through lush tea gardens, winding mountain roads, and charming Himalayan villages towards Darjeeling. After hotel check-in, relax and unwind. In the evening, enjoy a leisurely walk along the famous Mall Road and Chowrasta, explore local cafés, shop for handicrafts, or simply soak in the cool mountain atmosphere before returning to your hotel.",
+          "activities": [
+            "Airport/Railway Station Pickup",
+            "Scenic Mountain Drive",
+            "Hotel Check-in",
+            "Welcome Drink",
+            "Mall Road Walk",
+            "Chowrasta Visit",
+            "Local Shopping",
+            "Café Experience",
+            "Overnight Stay"
+          ],
+          "location": {
+            "formattedAddress": "Darjeeling, West Bengal, India",
+            "latitude": 27.0391914,
+            "longitude": 88.2638831
+          },
+          "_id": "6a4d26fd2849ab804673dc73"
+        },
+        {
+          "day": 2,
+          "title": "Tiger Hill Sunrise & Full-Day Darjeeling Sightseeing",
+          "description": "Wake up early for one of India's most iconic experiences—a breathtaking sunrise at Tiger Hill with panoramic views of Mount Kanchenjunga. On the return journey, visit the famous Batasia Loop and Ghoom Monastery. After breakfast, continue exploring Darjeeling's popular attractions including the Himalayan Mountaineering Institute, Padmaja Naidu Himalayan Zoological Park, Tenzing Rock, Tibetan Refugee Self Help Centre, Ropeway (optional), and Happy Valley Tea Estate where you can learn about world-famous Darjeeling tea production.",
+          "activities": [
+            "Tiger Hill Sunrise",
+            "Batasia Loop",
+            "Ghoom Monastery",
+            "Breakfast",
+            "Himalayan Mountaineering Institute",
+            "Himalayan Zoo",
+            "Ropeway Ride (Optional)",
+            "Tenzing Rock",
+            "Happy Valley Tea Estate",
+            "Tea Tasting",
+            "Evening at Leisure"
+          ],
+          "location": {
+            "formattedAddress": "Darjeeling, West Bengal, India",
+            "latitude": 27.0391914,
+            "longitude": 88.2638831
+          },
+          "_id": "6a4d26fd2849ab804673dc74"
+        },
+        {
+          "day": 3,
+          "title": "Toy Train Experience, Peace Pagoda & Local Heritage Tour",
+          "description": "After breakfast, board the world-famous UNESCO-listed Darjeeling Himalayan Railway Toy Train for a memorable heritage ride through picturesque landscapes. Continue your journey with visits to the Japanese Temple and Peace Pagoda, two peaceful landmarks offering panoramic Himalayan views. Explore local Tibetan markets, enjoy authentic local cuisine, discover colonial architecture, and spend the evening exploring Darjeeling's vibrant cafés and shopping streets.",
+          "activities": [
+            "Breakfast",
+            "Darjeeling Himalayan Railway Toy Train Ride",
+            "Japanese Temple",
+            "Peace Pagoda",
+            "Tibetan Refugee Centre",
+            "Local Market Visit",
+            "Café Hopping",
+            "Photography",
+            "Shopping",
+            "Overnight Stay"
+          ],
+          "location": {
+            "formattedAddress": "Darjeeling, West Bengal, India",
+            "latitude": 27.0391914,
+            "longitude": 88.2638831
+          },
+          "_id": "6a4d26fd2849ab804673dc75"
+        },
+        {
+          "day": 4,
+          "title": "Excursion to Mirik Lake & Himalayan Countryside",
+          "description": "After breakfast, embark on a scenic day excursion to Mirik, a serene hill station surrounded by pine forests and tea estates. Enjoy boating at the beautiful Sumendu Lake, stroll across the famous Indreni Footbridge, visit orange orchards (seasonal), explore local markets, and capture stunning views of the surrounding hills. Return to Darjeeling by evening for your final night in the mountains.",
+          "activities": [
+            "Breakfast",
+            "Scenic Drive",
+            "Mirik Lake Visit",
+            "Boating",
+            "Pine Forest Walk",
+            "Orange Orchards",
+            "Local Market",
+            "Return to Darjeeling"
+          ],
+          "location": {
+            "formattedAddress": "Mirik, West Bengal 734214, India",
+            "latitude": 26.8852968,
+            "longitude": 88.1827931
+          },
+          "_id": "6a4d26fd2849ab804673dc76"
+        },
+        {
+          "day": 5,
+          "title": "Departure with Beautiful Himalayan Memories",
+          "description": "Enjoy a relaxed breakfast while admiring the beautiful mountain views. Complete your hotel check-out and begin your return journey to Bagdogra Airport or NJP Railway Station. Take home unforgettable memories of Darjeeling's breathtaking landscapes, heritage toy train, tea gardens, and warm hospitality.",
+          "activities": [
+            "Breakfast",
+            "Hotel Check-out",
+            "Airport Transfer",
+            "Scenic Return Journey"
+          ],
+          "location": {
+            "formattedAddress": "Bagdogra, Siliguri, West Bengal 734421, India",
+            "latitude": 26.6820331,
+            "longitude": 88.3291314
+          },
+          "_id": "6a4d26fd2849ab804673dc77"
+        }
+      ],
+      "popularityScore": 0,
+      "rating": 0
+    }
+  ]
+}

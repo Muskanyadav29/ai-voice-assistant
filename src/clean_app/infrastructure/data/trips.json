@@ -1,0 +1,90 @@
+[
+  {
+    "id": "trip-001",
+    "title": "Paris City Break",
+    "destination": "Paris",
+    "country": "France",
+    "duration_days": 5,
+    "price_usd": 1299,
+    "description": "Explore the Eiffel Tower, Louvre Museum, and charming Montmartre cafes.",
+    "tags": ["city", "culture", "romantic", "europe"],
+    "start_date": "2026-09-10"
+  },
+  {
+    "id": "trip-002",
+    "title": "Tokyo Adventure",
+    "destination": "Tokyo",
+    "country": "Japan",
+    "duration_days": 8,
+    "price_usd": 2199,
+    "description": "Experience Shibuya, traditional temples, sushi markets, and bullet train day trips.",
+    "tags": ["city", "food", "culture", "asia"],
+    "start_date": "2026-10-05"
+  },
+  {
+    "id": "trip-003",
+    "title": "Bali Wellness Retreat",
+    "destination": "Ubud",
+    "country": "Indonesia",
+    "duration_days": 7,
+    "price_usd": 1599,
+    "description": "Yoga sessions, rice terrace hikes, spa treatments, and beach sunsets.",
+    "tags": ["wellness", "beach", "nature", "relaxation"],
+    "start_date": "2026-11-12"
+  },
+  {
+    "id": "trip-004",
+    "title": "Swiss Alps Hiking",
+    "destination": "Interlaken",
+    "country": "Switzerland",
+    "duration_days": 6,
+    "price_usd": 1899,
+    "description": "Guided alpine trails, lake cruises, and scenic train rides through the mountains.",
+    "tags": ["hiking", "mountains", "adventure", "europe"],
+    "start_date": "2026-07-20"
+  },
+  {
+    "id": "trip-005",
+    "title": "Safari in Serengeti",
+    "destination": "Serengeti",
+    "country": "Tanzania",
+    "duration_days": 10,
+    "price_usd": 3499,
+    "description": "Wildlife safaris, luxury lodges, and the great migration viewing experience.",
+    "tags": ["wildlife", "safari", "adventure", "africa"],
+    "start_date": "2026-08-01"
+  },
+  {
+    "id": "trip-006",
+    "title": "New York Highlights",
+    "destination": "New York City",
+    "country": "USA",
+    "duration_days": 4,
+    "price_usd": 1199,
+    "description": "Broadway show, Central Park, Times Square, and iconic skyline views.",
+    "tags": ["city", "entertainment", "shopping", "north-america"],
+    "start_date": "2026-12-01"
+  },
+  {
+    "id": "trip-007",
+    "title": "Greek Island Hopping",
+    "destination": "Santorini & Mykonos",
+    "country": "Greece",
+    "duration_days": 9,
+    "price_usd": 2399,
+    "description": "White-washed villages, Aegean beaches, local tavernas, and ferry island tours.",
+    "tags": ["beach", "islands", "culture", "europe"],
+    "start_date": "2026-06-15"
+  },
+  {
+    "id": "trip-008",
+    "title": "Costa Rica Eco Tour",
+    "destination": "Monteverde",
+    "country": "Costa Rica",
+    "duration_days": 8,
+    "price_usd": 1799,
+    "description": "Cloud forest canopy walks, zip-lining, volcano hikes, and sustainable eco-lodges.",
+    "tags": ["nature", "eco", "adventure", "central-america"],
+    "start_date": "2026-05-18"
+  }
+]

@@ -1,0 +1,222 @@
+{
+  "manali": {
+    "destination": "Manali",
+    "days": [
+      {
+        "day": 1,
+        "title": "Arrival and Mall Road Exploration",
+        "description": "Arrive in Manali, check in to your hotel and refresh. In the afternoon/evening, take a leisurely stroll down the vibrant Mall Road, shop for local handicrafts and woolens, and visit the historic wooden Hadimba Temple situated amidst tall deodar forests.",
+        "stops": ["Hotel in Manali", "Hadimba Devi Temple, Manali", "Mall Road, Manali", "Hotel in Manali"]
+      },
+      {
+        "day": 2,
+        "title": "Solang Valley Adventure",
+        "description": "Head out early to Solang Valley, a hub for outdoor adventure sports. Engage in thrilling activities such as paragliding, zorbing, and quad biking. In winter, Solang turns into a snow wonderland, perfect for skiing and amateur snowboarding.",
+        "stops": ["Hotel in Manali", "Solang Valley, Manali", "Atal Tunnel, Manali", "Hotel in Manali"]
+      },
+      {
+        "day": 3,
+        "title": "Vashisht Hot Springs & Scenic Departure",
+        "description": "Visit the quiet village of Vashisht, famous for its natural hot sulfur springs and ancient temples. Soak in the therapeutic warm waters to relax your muscles before taking a scenic drive back or heading to the bus/airport terminal for departure.",
+        "stops": ["Hotel in Manali", "Vashisht Hot Springs, Manali", "Departure Terminal, Manali"]
+      }
+    ]
+  },
+  "shimla": {
+    "destination": "Shimla",
+    "days": [
+      {
+        "day": 1,
+        "title": "The Ridge & Mall Road Walk",
+        "description": "Arrive in the historic summer capital of British India. Walk along The Ridge, admire the neo-gothic Christ Church, and browse the bustling shops and cafes on Mall Road.",
+        "stops": ["Hotel in Shimla", "The Ridge, Shimla", "Mall Road, Shimla", "Hotel in Shimla"]
+      },
+      {
+        "day": 2,
+        "title": "Kufri Adventure & Yak Riding",
+        "description": "Excursion to Kufri, situated at a higher elevation. Take a pony ride up to Mahasu Peak, experience yak riding, and visit the Himalayan Nature Park to see rare high-altitude wildlife.",
+        "stops": ["Hotel in Shimla", "Kufri, Shimla", "Himalayan Nature Park, Shimla", "Hotel in Shimla"]
+      },
+      {
+        "day": 3,
+        "title": "Jakhoo Temple & Departure",
+        "description": "Hike or take a ropeway up to Jakhoo Hill, the highest peak in Shimla, to see the giant Lord Hanuman statue and panoramic valley views. Depart in the afternoon.",
+        "stops": ["Hotel in Shimla", "Jakhoo Temple, Shimla", "Departure Terminal, Shimla"]
+      }
+    ]
+  },
+  "udaipur": {
+    "destination": "Udaipur",
+    "days": [
+      {
+        "day": 1,
+        "title": "City Palace & Lake Pichola Cruise",
+        "description": "Visit the majestic City Palace overlooking Lake Pichola. In the late afternoon, enjoy a scenic boat cruise around Lake Pichola, capturing views of Jag Mandir and the Lake Palace at sunset.",
+        "stops": ["Hotel in Udaipur", "City Palace, Udaipur", "Lake Pichola, Udaipur", "Hotel in Udaipur"]
+      },
+      {
+        "day": 2,
+        "title": "Saheliyon-ki-Bari & Monsoon Palace Sunset",
+        "description": "Stroll through the fountains of Saheliyon-ki-Bari gardens. In the evening, drive up to Sajjangarh Monsoon Palace on the hilltop for panoramic sunset views over the lakes.",
+        "stops": ["Hotel in Udaipur", "Saheliyon-ki-Bari, Udaipur", "Sajjangarh Monsoon Palace, Udaipur", "Hotel in Udaipur"]
+      },
+      {
+        "day": 3,
+        "title": "Jagdish Temple & Departure",
+        "description": "Explore the ornate, 17th-century Jagdish Temple. Shop for miniature paintings and traditional Rajasthani textiles in the old city bazaars before departure.",
+        "stops": ["Hotel in Udaipur", "Jagdish Temple, Udaipur", "Departure Terminal, Udaipur"]
+      }
+    ]
+  },
+  "delhi": {
+    "destination": "Delhi",
+    "days": [
+      {
+        "day": 1,
+        "title": "Historic Old Delhi and Street Food",
+        "description": "Explore the colossal Red Fort, visit the peaceful Jama Masjid, and take a rickshaw ride through the narrow lanes of Chandni Chowk, sampling famous street food like paranthas and jalebis.",
+        "stops": ["Hotel in Delhi", "Red Fort, Delhi", "Jama Masjid, Delhi", "Chandni Chowk, Delhi", "Hotel in Delhi"]
+      },
+      {
+        "day": 2,
+        "title": "New Delhi Heritage Landmarks",
+        "description": "Visit the beautiful Humayun's Tomb, drive past the majestic India Gate and Rashtrapati Bhavan, and explore the ancient towering minaret Qutub Minar.",
+        "stops": ["Hotel in Delhi", "Humayun's Tomb, Delhi", "India Gate, Delhi", "Qutub Minar, Delhi", "Hotel in Delhi"]
+      },
+      {
+        "day": 3,
+        "title": "Lotus Temple & Departure",
+        "description": "Spend a quiet morning at the flower-shaped Lotus Temple. Browse contemporary crafts at Dilli Haat open-air food and craft bazaar before heading to the airport/station.",
+        "stops": ["Hotel in Delhi", "Lotus Temple, Delhi", "Dilli Haat, Delhi", "Airport Terminal, Delhi"]
+      }
+    ]
+  },
+  "varanasi": {
+    "destination": "Varanasi",
+    "days": [
+      {
+        "day": 1,
+        "title": "Ganga Aarti & Ghat Exploration",
+        "description": "Arrive in one of the world's oldest living cities. Explore the old town alleys and witness the spiritual and spectacular evening Ganga Aarti at Dashashwamedh Ghat.",
+        "stops": ["Hotel in Varanasi", "Dashashwamedh Ghat, Varanasi", "Hotel in Varanasi"]
+      },
+      {
+        "day": 2,
+        "title": "Subah-e-Banaras & Sarnath excursion",
+        "description": "Take a magical sunrise boat ride on the Holy Ganges. In the afternoon, visit Sarnath, the peaceful archaeological site where Lord Buddha preached his first sermon.",
+        "stops": ["Hotel in Varanasi", "Assi Ghat, Varanasi", "Sarnath, Varanasi", "Hotel in Varanasi"]
+      },
+      {
+        "day": 3,
+        "title": "Kashi Vishwanath Temple & Departure",
+        "description": "Visit the sacred golden-domed Kashi Vishwanath Temple. Shop for exquisite Banarasi silk sarees before checking out for departure.",
+        "stops": ["Hotel in Varanasi", "Kashi Vishwanath Temple, Varanasi", "Departure Terminal, Varanasi"]
+      }
+    ]
+  },
+  "paris": {
+    "destination": "Paris",
+    "days": [
+      {
+        "day": 1,
+        "title": "Iconic Eiffel Tower & Seine Cruise",
+        "description": "Arrive in Paris. Visit the Eiffel Tower, walk along the Champ de Mars, and in the evening, enjoy a sunset cruise along the River Seine to view historical monuments.",
+        "stops": ["Hotel in Paris", "Eiffel Tower, Paris", "River Seine Cruise, Paris", "Hotel in Paris"]
+      },
+      {
+        "day": 2,
+        "title": "Art & Masterpieces at the Louvre",
+        "description": "Spend the day exploring the world-famous Louvre Museum to see the Mona Lisa and Venus de Milo. Later, walk the Champs-Élysées to the Arc de Triomphe.",
+        "stops": ["Hotel in Paris", "Louvre Museum, Paris", "Arc de Triomphe, Paris", "Hotel in Paris"]
+      },
+      {
+        "day": 3,
+        "title": "Montmartre & Sacré-Cœur Basilica",
+        "description": "Wander through the artistic bohemian village of Montmartre, visit the Place du Tertre, and take in panoramic city views from the Sacré-Cœur Basilica.",
+        "stops": ["Hotel in Paris", "Montmartre, Paris", "Sacre-Coeur Basilica, Paris", "Hotel in Paris"]
+      },
+      {
+        "day": 4,
+        "title": "Palace of Versailles Day Trip",
+        "description": "Take a short train ride to explore the magnificent Palace of Versailles, touring the Hall of Mirrors and walking through the sprawling royal gardens.",
+        "stops": ["Hotel in Paris", "Palace of Versailles, France", "Hotel in Paris"]
+      },
+      {
+        "day": 5,
+        "title": "Notre-Dame & departure",
+        "description": "Visit the Île de la Cité to see Notre-Dame Cathedral and the stained glass of Sainte-Chapelle before checking out for departure.",
+        "stops": ["Hotel in Paris", "Notre-Dame Cathedral, Paris", "Sainte-Chapelle, Paris", "Airport Terminal, Paris"]
+      }
+    ]
+  },
+  "tokyo": {
+    "destination": "Tokyo",
+    "days": [
+      {
+        "day": 1,
+        "title": "Futuristic Shibuya & Meiji Shrine",
+        "description": "Experience the famous Shibuya Crossing, see the Hachiko Statue, and walk through Yoyogi Park to the serene wooden Meiji Shrine.",
+        "stops": ["Hotel in Tokyo", "Shibuya Crossing, Tokyo", "Meiji Shrine, Tokyo", "Hotel in Tokyo"]
+      },
+      {
+        "day": 2,
+        "title": "Historic Asakusa & Akihabara Electronics",
+        "description": "Visit Senso-ji, Tokyo's oldest Buddhist temple in Asakusa. In the afternoon, dive into the neon lights, gaming centers, and anime shops of Akihabara.",
+        "stops": ["Hotel in Tokyo", "Senso-ji Temple, Asakusa, Tokyo", "Akihabara, Tokyo", "Hotel in Tokyo"]
+      },
+      {
+        "day": 3,
+        "title": "TeamLab Planets & Ginza Shopping",
+        "description": "Experience the immersive digital art museum TeamLab Planets. Spend the afternoon browsing luxury shops and cafes in the upscale Ginza district.",
+        "stops": ["Hotel in Tokyo", "teamLab Planets, Tokyo", "Ginza, Tokyo", "Hotel in Tokyo"]
+      },
+      {
+        "day": 4,
+        "title": "Mount Fuji Excursion",
+        "description": "Take a bullet train or guided tour to the Hakone/Lake Kawaguchiko region for scenic views of Mount Fuji and a relaxing cruise.",
+        "stops": ["Hotel in Tokyo", "Hakone, Kanagawa, Japan", "Hotel in Tokyo"]
+      },
+      {
+        "day": 5,
+        "title": "Shinjuku Gyoen & Departure",
+        "description": "Walk through the beautiful landscapes of Shinjuku Gyoen National Garden before taking the express train to Narita/Haneda airport.",
+        "stops": ["Hotel in Tokyo", "Shinjuku Gyoen National Garden, Tokyo", "Airport Terminal, Tokyo"]
+      }
+    ]
+  },
+  "ubud": {
+    "destination": "Ubud",
+    "days": [
+      {
+        "day": 1,
+        "title": "Sacred Monkey Forest & Ubud Palace",
+        "description": "Arrive in Bali's cultural heart. Stroll through the lush Sacred Monkey Forest Sanctuary and visit the traditional Ubud Royal Palace.",
+        "stops": ["Hotel in Ubud", "Sacred Monkey Forest Sanctuary, Ubud", "Ubud Palace, Ubud", "Hotel in Ubud"]
+      },
+      {
+        "day": 2,
+        "title": "Tegallalang Rice Terraces & Coffee Plantation",
+        "description": "Hike the iconic green Tegallalang Rice Terraces, try the jungle swings, and visit a local plantation to taste famous Balinese coffees and teas.",
+        "stops": ["Hotel in Ubud", "Tegallalang Rice Terraces, Ubud", "Local Coffee Plantation, Ubud", "Hotel in Ubud"]
+      },
+      {
+        "day": 3,
+        "title": "Tirta Empul Holy Water Temple & Spa",
+        "description": "Experience a spiritual purification ritual at Tirta Empul Temple. Indulge in a traditional Balinese massage and flower bath at an Ubud spa.",
+        "stops": ["Hotel in Ubud", "Tirta Empul Temple, Bali", "Local Luxury Spa, Ubud", "Hotel in Ubud"]
+      },
+      {
+        "day": 4,
+        "title": "Mount Batur Sunrise Trek",
+        "description": "Wake up early for an active sunrise hike to the summit of Mount Batur active volcano for breathtaking views and breakfast cooked by steam vents.",
+        "stops": ["Hotel in Ubud", "Mount Batur, Kintamani, Bali", "Hotel in Ubud"]
+      },
+      {
+        "day": 5,
+        "title": "Campuhan Ridge Walk & Departure",
+        "description": "Take a peaceful morning walk along the scenic Campuhan Ridge between hills and rivers before packing up for your return flight.",
+        "stops": ["Hotel in Ubud", "Campuhan Ridge Walk, Ubud", "Airport Terminal, Bali"]
+      }
+    ]
+  }
+}
