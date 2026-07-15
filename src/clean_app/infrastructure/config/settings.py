@@ -22,6 +22,7 @@ class Settings:
     trvios_trips_api_url: str = "https://api.trvios.com/api/ai/trips"
     trip_source: str = "trvios"
     sarvam_api_key: str | None = None
+    trvios_api_key: str | None = None
     google_places_api_key: str = "AIzaSyCcJn4CxZmLGoNXB2G10XV2N4K_gqRK6ww"
     mongodb_uri: str = "mongodb://localhost:27017"
     mongodb_db_name: str = "trip_chat"
@@ -29,11 +30,14 @@ class Settings:
     block_duration_hours: int = 48
     rate_limit_requests: int = 30
     rate_limit_window_seconds: int = 60
+    ollama_model: str = "llama3.2"
+
 
     @classmethod
     def from_env(cls) -> "Settings":
         openai_key = os.getenv("OPENAI_API_KEY")
         sarvam_key = os.getenv("SARVAM_API_KEY")
+        trvios_key = os.getenv("TRVIOS_API_KEY")
         return cls(
             app_env=os.getenv("APP_ENV", "development"),
             app_debug=os.getenv("APP_DEBUG", "false").lower() == "true",
@@ -50,6 +54,7 @@ class Settings:
             ),
             trip_source=os.getenv("TRIP_SOURCE", "trvios").lower(),
             sarvam_api_key=sarvam_key if sarvam_key else None,
+            trvios_api_key=trvios_key if trvios_key else None,
             google_places_api_key=os.getenv("GOOGLE_PLACES_API_KEY", "AIzaSyCcJn4CxZmLGoNXB2G10XV2N4K_gqRK6ww"),
             mongodb_uri=os.getenv("MONGODB_URI", "mongodb://localhost:27017"),
             mongodb_db_name=os.getenv("MONGODB_DB_NAME", "trip_chat"),
@@ -57,6 +62,8 @@ class Settings:
             block_duration_hours=int(os.getenv("BLOCK_DURATION_HOURS", "48")),
             rate_limit_requests=int(os.getenv("RATE_LIMIT_REQUESTS", "30")),
             rate_limit_window_seconds=int(os.getenv("RATE_LIMIT_WINDOW_SECONDS", "60")),
+            ollama_model=os.getenv("OLLAMA_MODEL", "llama3.2"),
+
         )
 
     def ensure_directories(self) -> None:

@@ -15,8 +15,9 @@ _DURATION_PATTERN = re.compile(r"(\d+)\s*days?", re.IGNORECASE)
 class TrviosTripRepository(TripRepository):
     """Trip repository backed by the Trvios external API."""
 
-    def __init__(self, api_url: str, timeout_seconds: float = 30.0) -> None:
+    def __init__(self, api_url: str, api_key: str | None = None, timeout_seconds: float = 30.0) -> None:
         self._api_url = api_url
+        self._api_key = api_key
         self._timeout_seconds = timeout_seconds
         self._trips: list[Trip] | None = None
 
@@ -48,10 +49,16 @@ class TrviosTripRepository(TripRepository):
         current_delay = 1.0
         last_error = None
 
+        headers = {}
+        if self._api_key:
+            headers["Authorization"] = f"Bearer {self._api_key}"
+            headers["x-api-key"] = self._api_key
+            headers["api-key"] = self._api_key
+
         for attempt in range(1, max_retries + 1):
             try:
                 logger.info(f"Fetching trips from Trvios API (attempt {attempt}/{max_retries})...")
-                response = httpx.get(self._api_url, timeout=self._timeout_seconds)
+                response = httpx.get(self._api_url, headers=headers, timeout=self._timeout_seconds)
                 response.raise_for_status()
                 payload = response.json()
 

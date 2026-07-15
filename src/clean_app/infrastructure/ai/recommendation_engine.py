@@ -49,6 +49,17 @@ class RecommendationEngine:
                     else:
                         matched = False
 
+            if entities.min_budget is not None:
+                # Give a boost to trips above or equal to min budget, and heavily penalize trips below it
+                if trip.price >= entities.min_budget:
+                    score += 3.0
+                else:
+                    # Let's keep trips slightly below min budget (-15% max) but penalize them
+                    if trip.price >= entities.min_budget * 0.85:
+                        score -= 4.0
+                    else:
+                        matched = False
+
             # 3. Duration filter
             if entities.duration_days is not None:
                 diff = abs(trip.duration_days - entities.duration_days)
@@ -74,6 +85,11 @@ class RecommendationEngine:
                 else:
                     # No activities match
                     score -= 1.0
+
+            # 5. Cheapest trip preference
+            if entities.sort_by_cheapest:
+                # Large boost to cheaper trips to prioritize them in search scoring
+                score += (100000.0 - trip.price) / 1000.0
 
             if matched:
                 scored_trips.append((trip, score))

@@ -318,7 +318,8 @@ function appendAiMetadata(bodyEl, intent, entities, validation) {
   
   const entitiesList = [];
   if (entities.destination) entitiesList.push(`Dest: <span class="ai-meta-tag">${escapeHtml(entities.destination)}</span>`);
-  if (entities.max_budget) entitiesList.push(`Budget: <span class="ai-meta-tag">₹${escapeHtml(entities.max_budget)}</span>`);
+  if (entities.min_budget) entitiesList.push(`MinBudget: <span class="ai-meta-tag">₹${escapeHtml(entities.min_budget)}</span>`);
+  if (entities.max_budget) entitiesList.push(`MaxBudget: <span class="ai-meta-tag">₹${escapeHtml(entities.max_budget)}</span>`);
   if (entities.duration_days) entitiesList.push(`Duration: <span class="ai-meta-tag">${escapeHtml(entities.duration_days)}d</span>`);
   if (entities.activities?.length) entitiesList.push(`Tags: <span class="ai-meta-tag">${escapeHtml(entities.activities.join(","))}</span>`);
   if (entities.trip_id) entitiesList.push(`TripRef: <span class="ai-meta-tag">${escapeHtml(entities.trip_id)}</span>`);

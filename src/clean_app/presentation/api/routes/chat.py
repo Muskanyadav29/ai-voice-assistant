@@ -47,7 +47,7 @@ async def check_user_safety_and_limits(
 
     # Identify user by client IP address, fallback to session_id
     client_ip = request.client.host if request.client else "unknown"
-    user_key = client_ip if client_ip != "unknown" else session_id
+    user_key = request.headers.get("x-user-key") or (client_ip if client_ip != "unknown" else session_id)
 
     # Get dynamic settings from MongoDB (falls back to Settings defaults)
     dyn_config = await mongo_repo.get_dynamic_settings(settings)

@@ -20,19 +20,38 @@ class ChromaVectorStore(VectorStore):
     """Persist trip and knowledge embeddings using ChromaDB."""
 
     def __init__(self, persist_directory: str) -> None:
-        self._client = chromadb.PersistentClient(path=persist_directory)
-        self._collection: Collection = self._client.get_or_create_collection(
-            name=COLLECTION_NAME,
-            metadata={"hnsw:space": "cosine"},
-        )
-        self._knowledge_collection: Collection = self._client.get_or_create_collection(
-            name=COLLECTION_KNOWLEDGE_NAME,
-            metadata={"hnsw:space": "cosine"},
-        )
+        self._fallback_mode = False
+        self._trips_db: dict[str, Trip] = {}
+        self._knowledge_db: dict[str, KnowledgeDocument] = {}
+        try:
+            self._client = chromadb.PersistentClient(path=persist_directory)
+            self._collection: Collection = self._client.get_or_create_collection(
+                name=COLLECTION_NAME,
+                metadata={"hnsw:space": "cosine"},
+            )
+            self._knowledge_collection: Collection = self._client.get_or_create_collection(
+                name=COLLECTION_KNOWLEDGE_NAME,
+                metadata={"hnsw:space": "cosine"},
+            )
+        except (Exception, BaseException) as e:
+            print(f"WARNING: Failed to initialize Chroma PersistentClient ({e}). Falling back to in-memory Python vector store.")
+            self._fallback_mode = True
 
     def index_trips(self, trips: list[Trip]) -> int:
         if not trips:
             return 0
+
+        if self._fallback_mode:
+            newly_added = 0
+            incoming_ids = {trip.id for trip in trips}
+            for tid in list(self._trips_db.keys()):
+                if tid not in incoming_ids:
+                    del self._trips_db[tid]
+            for trip in trips:
+                if trip.id not in self._trips_db:
+                    newly_added += 1
+                self._trips_db[trip.id] = trip
+            return newly_added
 
         existing = set(self._collection.get()["ids"])
         new_ids = {trip.id for trip in trips}
@@ -56,6 +75,21 @@ class ChromaVectorStore(VectorStore):
         if self.count() == 0:
             return []
 
+        if self._fallback_mode:
+            query_words = set(query.lower().split())
+            results = []
+            for trip in self._trips_db.values():
+                search_text = trip.to_search_text().lower()
+                matches = sum(1 for w in query_words if w in search_text)
+                score = 0.5
+                if query_words:
+                    score = min(0.9, 0.5 + 0.4 * (matches / len(query_words)))
+                if query.lower() in trip.destination.lower() or query.lower() in trip.title.lower():
+                    score = 0.95
+                results.append(TripSearchResult(trip=trip, score=score))
+            results.sort(key=lambda r: r.score, reverse=True)
+            return results[:top_k]
+
         result = self._collection.query(
             query_texts=[query],
             n_results=min(top_k, self.count()),
@@ -73,6 +107,8 @@ class ChromaVectorStore(VectorStore):
         return matches
 
     def count(self) -> int:
+        if self._fallback_mode:
+            return len(self._trips_db)
         return int(self._collection.count())
 
     @staticmethod
@@ -144,6 +180,18 @@ class ChromaVectorStore(VectorStore):
         if not documents:
             return 0
 
+        if self._fallback_mode:
+            newly_added = 0
+            incoming_ids = {doc.id for doc in documents}
+            for did in list(self._knowledge_db.keys()):
+                if did not in incoming_ids:
+                    del self._knowledge_db[did]
+            for doc in documents:
+                if doc.id not in self._knowledge_db:
+                    newly_added += 1
+                self._knowledge_db[doc.id] = doc
+            return newly_added
+
         existing = set(self._knowledge_collection.get()["ids"])
         new_ids = {doc.id for doc in documents}
 
@@ -164,6 +212,21 @@ class ChromaVectorStore(VectorStore):
         if self.count_knowledge() == 0:
             return []
 
+        if self._fallback_mode:
+            query_words = set(query.lower().split())
+            results = []
+            for doc in self._knowledge_db.values():
+                search_text = doc.to_search_text().lower()
+                matches = sum(1 for w in query_words if w in search_text)
+                score = 0.5
+                if query_words:
+                    score = min(0.9, 0.5 + 0.4 * (matches / len(query_words)))
+                if query.lower() in doc.title.lower():
+                    score = 0.95
+                results.append(KnowledgeSearchResult(document=doc, score=score))
+            results.sort(key=lambda r: r.score, reverse=True)
+            return results[:top_k]
+
         result = self._knowledge_collection.query(
             query_texts=[query],
             n_results=min(top_k, self.count_knowledge()),
@@ -181,6 +244,8 @@ class ChromaVectorStore(VectorStore):
         return matches
 
     def count_knowledge(self) -> int:
+        if self._fallback_mode:
+            return len(self._knowledge_db)
         return int(self._knowledge_collection.count())
 
     @staticmethod

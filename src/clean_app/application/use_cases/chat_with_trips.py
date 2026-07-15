@@ -130,6 +130,7 @@ class ChatWithTripsUseCase:
             "intent": analysis.intent,
             "entities": {
                 "destination": analysis.entities.destination,
+                "min_budget": analysis.entities.min_budget,
                 "max_budget": analysis.entities.max_budget,
                 "duration_days": analysis.entities.duration_days,
                 "activities": analysis.entities.activities,
@@ -526,6 +527,56 @@ class ChatWithTripsUseCase:
                 answer_chunks.append(token)
 
         elif analysis.intent in ["TRIP_RECOMMENDATION", "WEATHER_BASED_TRIP", "MOOD_BASED_TRIP"]:
+            if (analysis.entities.max_budget is not None or 
+                analysis.entities.min_budget is not None or 
+                analysis.entities.sort_by_cheapest):
+                all_trips = self._trip_repo.get_all()
+                recommended = self._recommendation_engine.recommend_trips(all_trips, analysis.entities, top_n=request.top_k)
+                knowledge_results = self._vector_store.search_knowledge(analysis.cleaned_query, top_k=2)
+
+                if recommended:
+                    sources = [
+                        TripSourceResponse(
+                            id=res.trip.id,
+                            title=res.trip.title,
+                            destination=f"{res.trip.destination}, {res.trip.country}",
+                            score=round(res.score, 4),
+                        )
+                        for res in recommended
+                    ]
+                    yield {
+                        "type": "sources",
+                        "sources": [
+                            {"id": s.id, "title": s.title, "destination": s.destination, "score": s.score}
+                            for s in sources
+                        ],
+                    }
+                    async for token in self._chat_service.stream_answer(analysis.cleaned_query, recommended, knowledge_results, request.voice_mode):
+                        yield {"type": "token", "content": token}
+                        answer_chunks.append(token)
+                else:
+                    results = self._vector_store.search(analysis.cleaned_query, top_k=request.top_k)
+                    sources = [
+                        TripSourceResponse(
+                            id=res.trip.id,
+                            title=res.trip.title,
+                            destination=f"{res.trip.destination}, {res.trip.country}",
+                            score=round(res.score, 4),
+                        )
+                        for res in results
+                    ]
+                    yield {
+                        "type": "sources",
+                        "sources": [
+                            {"id": s.id, "title": s.title, "destination": s.destination, "score": s.score}
+                            for s in sources
+                        ],
+                    }
+                    async for token in self._chat_service.stream_answer(analysis.cleaned_query, results, knowledge_results, request.voice_mode):
+                        yield {"type": "token", "content": token}
+                        answer_chunks.append(token)
+                return
+
             # Context analysis slots
             mood = analysis.entities.mood
             weather = analysis.entities.weather
@@ -616,6 +667,52 @@ class ChatWithTripsUseCase:
                 f"User mood: {mood}, weather: {weather}, occasion: {occasion}, budget: {budget}, duration: {duration}. "
                 f"Matching Trip Database Packages:\n{recs_text}"
             )
+
+            async for token in self._chat_service.stream_custom_prompt(system_prompt, user_prompt, request.voice_mode):
+                yield {"type": "token", "content": token}
+                answer_chunks.append(token)
+
+        elif analysis.intent == "LIST_TRIPS":
+            all_trips = self._trip_repo.get_all()
+            sources = [
+                TripSourceResponse(
+                    id=t.id,
+                    title=t.title,
+                    destination=f"{t.destination}, {t.country}",
+                    score=1.0,
+                )
+                for t in all_trips
+            ]
+            yield {
+                "type": "sources",
+                "sources": [
+                    {"id": s.id, "title": s.title, "destination": s.destination, "score": s.score}
+                    for s in sources
+                ],
+            }
+
+            trip_info_list = []
+            for t in all_trips:
+                trip_info_list.append(f"- **{t.title}** ({t.destination}): {t.description} ({t.duration_days} Days | Price starting from {t.currency} {t.price:,.0f})")
+            
+            recs_text = "\n".join(trip_info_list)
+
+            system_prompt = (
+                "You are TARA, a warm, professional travel concierge for Trvios (similar to Ixigo's voice assistant). "
+                "CRITICAL: Always respond in the same language and style (English, Hindi, or Hinglish/Indian English) as the user's query. "
+                "The user is asking to list all available travel packages or trips. "
+                "Provide a beautifully formatted list of ALL available packages from the provided database context. "
+                "For each trip, present its title, destination, duration, price, and a brief description. "
+                "Keep the tone premium and engaging. Ask the user which of these destinations they prefer to plan a personalized day-wise itinerary for."
+            )
+            if request.voice_mode:
+                system_prompt = (
+                    "You are TARA, a warm, professional travel concierge for Trvios on a two-way voice call. "
+                    "Briefly list the available trip destinations in under 40 words in plain text. "
+                    "Do NOT use markdown, bullet points, or list formatting. Ask which one they prefer."
+                )
+
+            user_prompt = f"Available Trip Packages in Database:\n{recs_text}"
 
             async for token in self._chat_service.stream_custom_prompt(system_prompt, user_prompt, request.voice_mode):
                 yield {"type": "token", "content": token}
@@ -891,7 +988,12 @@ class ChatWithTripsUseCase:
                     "office", "headquarter", "founder", "owner", "started", "founded", "company", "team", "mission", "vision",
                     "value", "price", "guarantee", "reschedule", "modify", "policy", "fees", "guide", "operator", "host",
                     "portal", "community", "departure", "group", "solo", "motorcycle", "bike", "ride", "rafting", "camp",
-                    "trek", "blog", "itinerary", "generator", "bot", "assistant"
+                    "trek", "blog", "itinerary", "generator", "bot", "assistant", "trip", "package", "tour", "meals", "food",
+                    "dinner", "lunch", "breakfast", "accommodation", "stay", "room", "gst", "tax", "emi", "charge", "discount",
+                    "offer", "deal", "coupon", "women", "girl", "seat", "spot", "place", "activities", "expert", "captain",
+                    "weather", "forecast", "temp", "monsoon", "rain", "snow", "waterfall", "scenery", "event", "meeting",
+                    "hotel", "restaurant", "dining", "split", "bill", "expense", "share", "payment", "settle", "inclusion",
+                    "exclusion", "include", "exclude", "beginner", "difficulty", "rent", "fee"
                 ])
                 if knowledge_results and (is_platform_query or any(res.score > 0.15 for res in knowledge_results)):
                     async for token in self._chat_service.stream_answer(analysis.cleaned_query, [], knowledge_results, request.voice_mode):

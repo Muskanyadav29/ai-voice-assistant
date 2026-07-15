@@ -31,17 +31,7 @@ class SafetyService:
         if not trimmed:
             return True, ""
 
-        # 1. Repeated character check (e.g. Aaaaaaaa)
-        if REPEATED_CHARS_PATTERN.search(trimmed):
-            return False, "Repeated character spam"
-
-        cleaned_text = "".join(trimmed.split()).lower()
-        if len(cleaned_text) > 6:
-            for char in set(cleaned_text):
-                if cleaned_text.count(char) / len(cleaned_text) > 0.5:
-                    return False, "High character frequency spam"
-
-        # 2. Emoji spam check
+        # 1. Emoji spam check (run first so emoji spam is categorized as emoji spam, not repeated char spam)
         emoji_count = 0
         for char in trimmed:
             o = ord(char)
@@ -58,6 +48,16 @@ class SafetyService:
         if emoji_count > 5:
             return False, "Emoji spam detected"
 
+        # 2. Repeated character check (e.g. Aaaaaaaa)
+        if REPEATED_CHARS_PATTERN.search(trimmed):
+            return False, "Repeated character spam"
+
+        cleaned_text = "".join(trimmed.split()).lower()
+        if len(cleaned_text) > 6:
+            for char in set(cleaned_text):
+                if cleaned_text.count(char) / len(cleaned_text) > 0.5:
+                    return False, "High character frequency spam"
+
         # 3. Keyboard mashing / Gibberish consonant cluster check (e.g. Gsshususjsjshdh, ababbaba)
         words = trimmed.split()
         vowels = set("aeiouAEIOU")
@@ -72,6 +72,14 @@ class SafetyService:
             # Heuristic for low letter variety (e.g. ababbaba -> unique chars: a, b -> length 8)
             if len(cleaned_word) > 5 and len(set(cleaned_word.lower())) <= 2:
                 return False, "Keyboard mashing detected (low letter variety)"
+
+            # Check for keyboard row sequences (e.g. qwertyuiop, asdfgh)
+            keyboard_rows = ["qwertyuiop", "asdfghjkl", "zxcvbnm"]
+            for row in keyboard_rows:
+                for i in range(len(cleaned_word) - 4):
+                    sub = cleaned_word[i:i+5].lower()
+                    if sub in row or sub in row[::-1]:
+                        return False, "Keyboard mashing detected (keyboard row sequence)"
 
             consec_consonants = 0
             max_consec_consonants = 0

@@ -43,5 +43,32 @@
     "booking_date": "2026-07-03",
     "price": 15999.0,
     "status": "Confirmed"
+  },
+  {
+    "id": "TRV-98790",
+    "trip_id": "6995abe10ea1c25e694a5cd8",
+    "trip_title": "Rishikesh Adventure Camp",
+    "customer_name": "Explorer User",
+    "booking_date": "2026-07-11",
+    "price": 5499.0,
+    "status": "Confirmed"
+  },
+  {
+    "id": "TRV-75274",
+    "trip_id": "6a4d26fd2849ab804673dc72",
+    "trip_title": "Enchanting Darjeeling Escape",
+    "customer_name": "Explorer User",
+    "booking_date": "2026-07-12",
+    "price": 14999.0,
+    "status": "Confirmed"
+  },
+  {
+    "id": "TRV-46923",
+    "trip_id": "69879272f5915890628bac68",
+    "trip_title": "Agra Heritage Weekend",
+    "customer_name": "Explorer User",
+    "booking_date": "2026-07-13",
+    "price": 5499.0,
+    "status": "Confirmed"
   }
 ]

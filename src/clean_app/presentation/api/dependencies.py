@@ -33,6 +33,10 @@ from clean_app.infrastructure.ai.static_itinerary_engine import StaticItineraryE
 from clean_app.infrastructure.ai.google_directions_service import GoogleDirectionsService
 from clean_app.infrastructure.ai.currency_service import CurrencyService
 
+from clean_app.infrastructure.ai.ollama_service import OllamaService
+from clean_app.infrastructure.persistence.mongo_place_details_repository import MongoPlaceDetailsRepository
+from clean_app.application.use_cases.get_place_details import GetPlaceDetailsUseCase
+
 
 
 @dataclass
@@ -56,6 +60,8 @@ class AppContainer:
     recommendation_engine: RecommendationEngine
     safety_service: SafetyService
     book_trip: BookTripUseCase
+    get_place_details: GetPlaceDetailsUseCase
+
     mongo_safety_repository: MongoSafetyRepository = None
     google_places_service: GooglePlacesService = None
     weather_service: WeatherService = None
@@ -75,7 +81,10 @@ def build_trip_repository(settings: Settings) -> TripRepository:
             "Static trip source is not allowed in this environment. "
             "Please use the Trvios API."
         )
-    return TrviosTripRepository(settings.trvios_trips_api_url)
+    return TrviosTripRepository(
+        settings.trvios_trips_api_url,
+        api_key=settings.trvios_api_key,
+    )
 
 
 def build_container(settings: Settings | None = None) -> AppContainer:
@@ -106,6 +115,12 @@ def build_container(settings: Settings | None = None) -> AppContainer:
     google_directions_service = GoogleDirectionsService(resolved_settings)
     currency_service = CurrencyService()
 
+    # Place details dependencies
+    place_details_repository = MongoPlaceDetailsRepository(resolved_settings)
+    ollama_service = OllamaService(resolved_settings)
+    get_place_details_use_case = GetPlaceDetailsUseCase(place_details_repository, ollama_service)
+
+
     return AppContainer(
         settings=resolved_settings,
         trip_repository=trip_repository,
@@ -128,6 +143,8 @@ def build_container(settings: Settings | None = None) -> AppContainer:
         google_directions_service=google_directions_service,
         currency_service=currency_service,
         modify_itinerary=modify_itinerary_use_case,
+        get_place_details=get_place_details_use_case,
+
         chat_with_trips=ChatWithTripsUseCase(
             vector_store=vector_store,
             trip_repo=trip_repository,

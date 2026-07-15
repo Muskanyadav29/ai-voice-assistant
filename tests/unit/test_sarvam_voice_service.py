@@ -19,13 +19,11 @@ def test_voice_service_initialization() -> None:
 @patch("clean_app.infrastructure.ai.tts_stt_service.httpx.AsyncClient")
 def test_transcribe_audio_uses_sarvam_when_key_present(mock_client_class) -> None:
     # Setup mock response for Sarvam STT POST request
-    mock_client = AsyncMock()
+    mock_client = mock_client_class.return_value
     mock_response = MagicMock()
     mock_response.json.return_value = {"transcript": "Hello from Sarvam"}
     mock_response.raise_for_status = MagicMock()
-    mock_client.post.return_value = mock_response
-    mock_client_class.return_value.__aenter__ = AsyncMock(return_value=mock_client)
-    mock_client_class.return_value.__aexit__ = AsyncMock()
+    mock_client.post = AsyncMock(return_value=mock_response)
 
     settings = Settings(openai_api_key=None, sarvam_api_key="mock_sarvam_key")
     service = VoiceService(settings)
@@ -40,13 +38,11 @@ def test_transcribe_audio_uses_sarvam_when_key_present(mock_client_class) -> Non
 @patch("clean_app.infrastructure.ai.tts_stt_service.httpx.AsyncClient")
 def test_generate_speech_uses_sarvam_when_key_present(mock_client_class, tmp_path) -> None:
     # Setup mock response for Sarvam TTS POST request returning base64 encoded audio
-    mock_client = AsyncMock()
+    mock_client = mock_client_class.return_value
     mock_response = MagicMock()
     mock_response.json.return_value = {"audio_content": "VGVzdCBBdWRpbw=="}  # "Test Audio" base64
     mock_response.raise_for_status = MagicMock()
-    mock_client.post.return_value = mock_response
-    mock_client_class.return_value.__aenter__ = AsyncMock(return_value=mock_client)
-    mock_client_class.return_value.__aexit__ = AsyncMock()
+    mock_client.post = AsyncMock(return_value=mock_response)
 
     settings = Settings(openai_api_key=None, sarvam_api_key="mock_sarvam_key")
     service = VoiceService(settings)

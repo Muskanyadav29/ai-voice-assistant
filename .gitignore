@@ -52,3 +52,11 @@ Thumbs.db
 
 # Local Safety Fallback State
 .safety_fallback_state.json
+
+# Local databases, caches, and portable binaries
+data/tts_cache/
+data/chroma_test_run/
+mongodb-data/
+mongodb-portable/
+.places_fallback_state.json
+

@@ -87,3 +87,15 @@ def test_recommendation_engine_filtering() -> None:
     recs_3 = engine.recommend_trips(all_trips, entities_3)
     assert len(recs_3) > 0
     assert recs_3[0].trip.id == "trip-udaipur"
+
+    # Test 4: Match by minimum budget limit
+    entities_4 = ParsedEntities(
+        min_budget=16000.0,
+    )
+    recs_4 = engine.recommend_trips(all_trips, entities_4)
+    ids_returned_4 = [r.trip.id for r in recs_4]
+    assert "trip-manali" in ids_returned_4
+    assert "trip-expensive" in ids_returned_4
+    assert "trip-udaipur" in ids_returned_4
+    # expensive and manali should rank higher than Udaipur (which is below min budget and penalized)
+    assert recs_4[0].trip.id in ["trip-manali", "trip-expensive"]

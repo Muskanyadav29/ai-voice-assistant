@@ -207,17 +207,21 @@ class TemplateChatService(ChatService):
                 break
 
         # Check if this is a Trip Recommendation prompt
-        if "Recommend the best destinations" in system_prompt or "Matching Trip Database Packages:" in user_prompt:
+        if "Recommend the best destinations" in system_prompt or "Matching Trip Database Packages:" in user_prompt or "Available Trip Packages" in user_prompt:
             trips_section = ""
+            is_list_all = "Available Trip Packages" in user_prompt
             if "Matching Trip Database Packages:\n" in user_prompt:
                 trips_section = user_prompt.split("Matching Trip Database Packages:\n", 1)[1].strip()
+            elif "Available Trip Packages in Database:\n" in user_prompt:
+                trips_section = user_prompt.split("Available Trip Packages in Database:\n", 1)[1].strip()
             
             if voice_mode:
-                response = "Based on your context, I suggest checking out our popular packages. Which destination would you like to plan an itinerary for?"
+                response = "Here are the available trip destinations. Which one would you like to plan an itinerary for?"
             else:
+                header = "Here are all the available trip packages:" if is_list_all else "Here are the top trip recommendations based on your preferences:"
                 response = (
                     "### Recommended Trips & Packages\n\n"
-                    "Here are the top trip recommendations based on your preferences:\n\n"
+                    f"{header}\n\n"
                     f"{trips_section or '- Nature Retreat in Manali\n- Cultural Highlights of Udaipur\n- Beach Escape in Goa'}\n\n"
                     "Please tell me which destination you would like to generate a detailed day-wise itinerary for!"
                 )

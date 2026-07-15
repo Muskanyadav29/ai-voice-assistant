@@ -15,6 +15,7 @@ logger = get_logger(__name__)
 class ParsedEntities:
     """Entities extracted from user query."""
     destination: str | None = None
+    min_budget: float | None = None
     max_budget: float | None = None
     duration_days: int | None = None
     activities: list[str] = field(default_factory=list)
@@ -25,6 +26,7 @@ class ParsedEntities:
     mood: str | None = None
     weather: str | None = None
     occasion: str | None = None
+    sort_by_cheapest: bool = False
 
 
 @dataclass
@@ -86,11 +88,12 @@ class IntentNERService:
             f"{history_context}\n\n"
             "The JSON output MUST follow this schema:\n"
             "{\n"
-            "  \"intent\": \"ITINERARY\" | \"ITINERARY_MODIFY\" | \"TRIP_RECOMMENDATION\" | \"WEATHER_BASED_TRIP\" | \"MOOD_BASED_TRIP\" | \"HOTEL_SEARCH\" | \"RESTAURANT_SEARCH\" | \"WEATHER\" | \"BOOKING\" | \"PRICE_QUERY\" | \"SPLIT_BILL\" | \"GENERAL_QNA\",\n"
+            "  \"intent\": \"ITINERARY\" | \"ITINERARY_MODIFY\" | \"TRIP_RECOMMENDATION\" | \"WEATHER_BASED_TRIP\" | \"MOOD_BASED_TRIP\" | \"HOTEL_SEARCH\" | \"RESTAURANT_SEARCH\" | \"WEATHER\" | \"BOOKING\" | \"PRICE_QUERY\" | \"SPLIT_BILL\" | \"GENERAL_QNA\" | \"LIST_TRIPS\",\n"
             "  \"cleaned_query\": \"spell-corrected and finalized query string\",\n"
             "  \"language\": \"detected language code, e.g. 'en', 'hi'\",\n"
             "  \"entities\": {\n"
             "    \"destination\": \"city, state, region, or country (string, or null if none)\",\n"
+            "    \"min_budget\": \"minimum budget numeric value if mentioned (float, or null)\",\n"
             "    \"max_budget\": \"maximum budget numeric value if mentioned (float, or null)\",\n"
             "    \"duration_days\": \"duration of trip in days if mentioned (integer, or null)\",\n"
             "    \"activities\": [\"list of activities or tags mentioned, e.g. ['hiking', 'relaxing']\"],\n"
@@ -99,7 +102,8 @@ class IntentNERService:
             "    \"couple\": \"boolean indicating if the query references traveling as a couple/pair (true/false, defaults to false)\",\n"
             "    \"mood\": \"trip mood / vibe: 'feeling low' | 'romantic' | 'excited' | 'stressed' | 'peaceful' | 'adventure' | 'relaxation' | null\",\n"
             "    \"weather\": \"trip weather/climate preference: 'rainy' | 'sunny' | 'snow' | 'cold' | 'hot' | null\",\n"
-            "    \"occasion\": \"trip occasion: 'weekend' | 'honeymoon' | 'family' | 'solo' | 'friends' | 'couple' | null\"\n"
+            "    \"occasion\": \"trip occasion: 'weekend' | 'honeymoon' | 'family' | 'solo' | 'friends' | 'couple' | null\",\n"
+            "    \"sort_by_cheapest\": \"boolean indicating if the query is seeking the cheapest, lowest cost, or most affordable trips (true/false, defaults to false)\"\n"
             "  }\n"
             "}\n\n"
             "Intent guidelines:\n"
@@ -114,6 +118,7 @@ class IntentNERService:
             "- BOOKING: User wants to register, book, purchase, or reserve a package.\n"
             "- PRICE_QUERY: User is asking about prices, package costs, budget fits, or searching for packages by mood/tag/activity (e.g. 'trips under 20000', 'nature trips', 'romantic packages', 'adventure tours').\n"
             "- SPLIT_BILL: User wants to calculate split bills, group expenses, or use the calculator.\n"
+            "- LIST_TRIPS: User wants to see a list of all available travel packages or trips (e.g., 'list all trips', 'show me all packages', 'what trips do you have').\n"
             "- GENERAL_QNA: Greetings, off-topic small talk, or platform knowledge/features."
         )
 
@@ -159,6 +164,7 @@ class IntentNERService:
 
             entities = ParsedEntities(
                 destination=ent_dict.get("destination"),
+                min_budget=_safe_float(ent_dict.get("min_budget")),
                 max_budget=_safe_float(ent_dict.get("max_budget")),
                 duration_days=_safe_int(ent_dict.get("duration_days")),
                 activities=list(ent_dict.get("activities", [])),
@@ -168,6 +174,7 @@ class IntentNERService:
                 mood=ent_dict.get("mood"),
                 weather=ent_dict.get("weather"),
                 occasion=ent_dict.get("occasion"),
+                sort_by_cheapest=bool(ent_dict.get("sort_by_cheapest", False)),
             )
 
             return IntentNERResult(
@@ -200,6 +207,8 @@ class IntentNERService:
 
             if any(w in low_query for w in ["replace", "swap", "remove stop", "attraction swap", "hotel change", "substitute"]):
                 fallback_intent = "ITINERARY_MODIFY"
+            elif any(w in low_query for w in ["list all", "show all", "all trips", "list trips", "show trips", "get all trips", "every trip"]):
+                fallback_intent = "LIST_TRIPS"
             elif any(w in low_query for w in ["suggest", "recommend", "options", "popular", "where to", "getaway", "destinations"]):
                 fallback_intent = "TRIP_RECOMMENDATION"
             elif "itinerary" in low_query or "plan" in low_query or "trip to" in low_query or "days in" in low_query:
@@ -219,9 +228,71 @@ class IntentNERService:
             elif is_well_being_query(c_query):
                 fallback_intent = "WELL_BEING"
 
+            # Fallback NLU parser for entities:
+            import re
+            
+            min_budget = None
+            max_budget = None
+            
+            # budget keywords extraction
+            num_pattern = r'(\d+(?:\.\d+)?)\s*(k)?'
+            under_match = re.search(
+                r'(?:under|below|less than|max|maximum|budget|price|<|<=)\s*(?:budget\s*)?(?:price\s*)?(?:₹|rs\.?|rupees?)?\s*' + num_pattern,
+                low_query
+            )
+            above_match = re.search(
+                r'(?:above|over|greater than|more than|min|minimum|>|>=)\s*(?:budget\s*)?(?:price\s*)?(?:₹|rs\.?|rupees?)?\s*' + num_pattern,
+                low_query
+            )
+            
+            if under_match:
+                val = float(under_match.group(1))
+                if under_match.group(2):  # 'k' suffix
+                    val *= 1000
+                max_budget = val
+            if above_match:
+                val = float(above_match.group(1))
+                if above_match.group(2):  # 'k' suffix
+                    val *= 1000
+                min_budget = val
+
+            # extract destination
+            detected_dest = None
+            destinations = [
+                "manali", "udaipur", "goa", "shimla", "varanasi", "rishikesh", 
+                "agra", "munnar", "ooty", "ladakh", "alleppey", "sikkim", "jaipur"
+            ]
+            for dest in destinations:
+                if dest in low_query:
+                    detected_dest = dest.title()
+                    break
+
+            # extract duration_days
+            duration_match = re.search(r'(\d+)\s*(?:day|night|night\s*day)', low_query)
+            duration_days = int(duration_match.group(1)) if duration_match else None
+
+            # extract activities
+            detected_activities = []
+            activities_kws = ["hiking", "trekking", "culture", "heritage", "beach", "adventure", "snow", "camping"]
+            for act in activities_kws:
+                if act in low_query:
+                    detected_activities.append(act)
+
+            sort_by_cheapest = any(w in low_query for w in ["cheapest", "lowest price", "least expensive", "lowest cost", "most affordable"])
+
+            parsed_fallback_entities = ParsedEntities(
+                destination=detected_dest,
+                min_budget=min_budget,
+                max_budget=max_budget,
+                duration_days=duration_days,
+                activities=detected_activities,
+                mood=detected_mood,
+                sort_by_cheapest=sort_by_cheapest,
+            )
+
             return IntentNERResult(
                 intent=fallback_intent,
                 cleaned_query=c_query,
                 language="en",
-                entities=ParsedEntities(mood=detected_mood),
+                entities=parsed_fallback_entities,
             )
