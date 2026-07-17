@@ -248,6 +248,28 @@ class ChromaVectorStore(VectorStore):
             return len(self._knowledge_db)
         return int(self._knowledge_collection.count())
 
+    def add_knowledge_documents(self, documents: list[KnowledgeDocument]) -> int:
+        if not documents:
+            return 0
+
+        if self._fallback_mode:
+            newly_added = 0
+            for doc in documents:
+                if doc.id not in self._knowledge_db:
+                    newly_added += 1
+                self._knowledge_db[doc.id] = doc
+            return newly_added
+
+        existing = set(self._knowledge_collection.get()["ids"])
+        newly_added = [doc for doc in documents if doc.id not in existing]
+
+        self._knowledge_collection.upsert(
+            ids=[doc.id for doc in documents],
+            documents=[doc.to_search_text() for doc in documents],
+            metadatas=[self._knowledge_to_metadata(doc) for doc in documents],
+        )
+        return len(newly_added)
+
     @staticmethod
     def _knowledge_to_metadata(doc: KnowledgeDocument) -> dict[str, Any]:
         return {

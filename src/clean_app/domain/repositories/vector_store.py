@@ -50,3 +50,7 @@ class VectorStore(ABC):
     def count_knowledge(self) -> int:
         """Return how many platform knowledge documents are currently indexed."""
 
+    @abstractmethod
+    def add_knowledge_documents(self, documents: list[KnowledgeDocument]) -> int:
+        """Add platform knowledge documents without removing any existing ones. Returns count of newly added documents."""
+

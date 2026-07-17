@@ -8,7 +8,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
 from clean_app.presentation.api.dependencies import AppContainer, build_container
-from clean_app.presentation.api.routes import chat, trips, bookings, places
+from clean_app.presentation.api.routes import chat, trips, bookings, places, ingest
 
 WEB_DIR = Path(__file__).resolve().parent.parent / "web"
 
@@ -46,6 +46,7 @@ def create_app(container: AppContainer | None = None) -> FastAPI:
     app.include_router(chat.router, prefix="/api")
     app.include_router(bookings.router, prefix="/api")
     app.include_router(places.router, prefix="/api")
+    app.include_router(ingest.router, prefix="/api")
 
     if WEB_DIR.is_dir():
         app.mount("/", StaticFiles(directory=WEB_DIR, html=True), name="web")

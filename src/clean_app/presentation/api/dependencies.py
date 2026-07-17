@@ -8,6 +8,7 @@ from clean_app.application.use_cases.list_trips import ListTripsUseCase
 from clean_app.application.use_cases.book_trip import BookTripUseCase
 from clean_app.application.use_cases.index_knowledge import IndexKnowledgeUseCase
 from clean_app.application.use_cases.modify_itinerary import ModifyItineraryUseCase
+from clean_app.application.use_cases.ingest_document import IngestWebsiteUseCase, IngestPdfUseCase, IngestImageUseCase
 
 from clean_app.domain.repositories.trip_repository import TripRepository
 from clean_app.domain.repositories.vector_store import VectorStore
@@ -36,6 +37,9 @@ from clean_app.infrastructure.ai.currency_service import CurrencyService
 from clean_app.infrastructure.ai.ollama_service import OllamaService
 from clean_app.infrastructure.persistence.mongo_place_details_repository import MongoPlaceDetailsRepository
 from clean_app.application.use_cases.get_place_details import GetPlaceDetailsUseCase
+from clean_app.infrastructure.extraction.pdf_extractor import PdfExtractor
+from clean_app.infrastructure.extraction.web_extractor import WebExtractor
+from clean_app.infrastructure.extraction.image_extractor import ImageExtractor
 
 
 
@@ -61,6 +65,9 @@ class AppContainer:
     safety_service: SafetyService
     book_trip: BookTripUseCase
     get_place_details: GetPlaceDetailsUseCase
+    ingest_website: IngestWebsiteUseCase
+    ingest_pdf: IngestPdfUseCase
+    ingest_image: IngestImageUseCase
 
     mongo_safety_repository: MongoSafetyRepository = None
     google_places_service: GooglePlacesService = None
@@ -120,6 +127,13 @@ def build_container(settings: Settings | None = None) -> AppContainer:
     ollama_service = OllamaService(resolved_settings)
     get_place_details_use_case = GetPlaceDetailsUseCase(place_details_repository, ollama_service)
 
+    # Document Ingestion dependencies
+    web_extractor = WebExtractor()
+    pdf_extractor = PdfExtractor()
+    image_extractor = ImageExtractor(resolved_settings)
+    ingest_website_use_case = IngestWebsiteUseCase(web_extractor, vector_store)
+    ingest_pdf_use_case = IngestPdfUseCase(pdf_extractor, vector_store)
+    ingest_image_use_case = IngestImageUseCase(image_extractor, vector_store)
 
     return AppContainer(
         settings=resolved_settings,
@@ -144,6 +158,9 @@ def build_container(settings: Settings | None = None) -> AppContainer:
         currency_service=currency_service,
         modify_itinerary=modify_itinerary_use_case,
         get_place_details=get_place_details_use_case,
+        ingest_website=ingest_website_use_case,
+        ingest_pdf=ingest_pdf_use_case,
+        ingest_image=ingest_image_use_case,
 
         chat_with_trips=ChatWithTripsUseCase(
             vector_store=vector_store,
