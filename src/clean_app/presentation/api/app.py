@@ -8,7 +8,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
 from clean_app.presentation.api.dependencies import AppContainer, build_container
-from clean_app.presentation.api.routes import chat, trips, bookings, places, ingest
+from clean_app.presentation.api.routes import chat, trips, bookings, places, ingest, train, itinerary, unified
 
 WEB_DIR = Path(__file__).resolve().parent.parent / "web"
 
@@ -28,9 +28,9 @@ def create_app(container: AppContainer | None = None) -> FastAPI:
     resolved_container = container or build_container()
 
     app = FastAPI(
-        title="Trip Chat API",
-        description="AI streaming chat over trip data with vector search (RAG).",
-        version="0.1.0",
+        title="Trip Chat & Training API",
+        description="Unified 1-API for AI Chat, FAQ, PDF, Website, MongoDB Trips Training, and Itinerary Planning.",
+        version="1.0.0",
         lifespan=lifespan,
     )
     app.state.container = resolved_container
@@ -40,16 +40,22 @@ def create_app(container: AppContainer | None = None) -> FastAPI:
         return {
             "status": "ok",
             "indexed_trips": resolved_container.vector_store.count(),
+            "indexed_knowledge": resolved_container.vector_store.count_knowledge(),
         }
 
+    app.include_router(unified.router, prefix="/api")
     app.include_router(trips.router, prefix="/api")
     app.include_router(chat.router, prefix="/api")
     app.include_router(bookings.router, prefix="/api")
     app.include_router(places.router, prefix="/api")
     app.include_router(ingest.router, prefix="/api")
+    app.include_router(train.router, prefix="/api")
+    app.include_router(itinerary.router, prefix="/api")
 
     if WEB_DIR.is_dir():
         app.mount("/", StaticFiles(directory=WEB_DIR, html=True), name="web")
 
     return app
+
+
 app = create_app()

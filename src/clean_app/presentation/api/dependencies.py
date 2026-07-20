@@ -9,6 +9,9 @@ from clean_app.application.use_cases.book_trip import BookTripUseCase
 from clean_app.application.use_cases.index_knowledge import IndexKnowledgeUseCase
 from clean_app.application.use_cases.modify_itinerary import ModifyItineraryUseCase
 from clean_app.application.use_cases.ingest_document import IngestWebsiteUseCase, IngestPdfUseCase, IngestImageUseCase
+from clean_app.application.use_cases.ingest_faq import IngestFaqUseCase
+from clean_app.application.use_cases.index_mongo_trips import IndexMongoTripsUseCase
+from clean_app.application.use_cases.plan_itinerary import PlanItineraryUseCase
 
 from clean_app.domain.repositories.trip_repository import TripRepository
 from clean_app.domain.repositories.vector_store import VectorStore
@@ -18,6 +21,7 @@ from clean_app.infrastructure.ai.chat_service import ChatService, build_chat_ser
 from clean_app.infrastructure.config.settings import Settings
 from clean_app.infrastructure.persistence.static_trip_repository import StaticTripRepository
 from clean_app.infrastructure.persistence.trvios_trip_repository import TrviosTripRepository
+from clean_app.infrastructure.persistence.mongo_trip_repository import MongoTripRepository
 from clean_app.infrastructure.persistence.static_knowledge_repository import StaticKnowledgeRepository
 from clean_app.infrastructure.persistence.in_memory_booking_repository import InMemoryBookingRepository
 from clean_app.infrastructure.persistence.mongo_safety_repository import MongoSafetyRepository
@@ -42,7 +46,6 @@ from clean_app.infrastructure.extraction.web_extractor import WebExtractor
 from clean_app.infrastructure.extraction.image_extractor import ImageExtractor
 
 
-
 @dataclass
 class AppContainer:
     """Shared application services for API routes."""
@@ -55,8 +58,8 @@ class AppContainer:
     index_trips: IndexTripsUseCase
     index_knowledge: IndexKnowledgeUseCase
     chat_with_trips: ChatWithTripsUseCase
-    
-    # New services
+
+    # Services
     booking_repository: BookingRepository
     voice_service: VoiceService
     intent_ner_service: IntentNERService
@@ -68,7 +71,11 @@ class AppContainer:
     ingest_website: IngestWebsiteUseCase
     ingest_pdf: IngestPdfUseCase
     ingest_image: IngestImageUseCase
+    ingest_faq: IngestFaqUseCase = None
+    index_mongo_trips: IndexMongoTripsUseCase = None
+    plan_itinerary: PlanItineraryUseCase = None
 
+    mongo_trip_repository: MongoTripRepository = None
     mongo_safety_repository: MongoSafetyRepository = None
     google_places_service: GooglePlacesService = None
     weather_service: WeatherService = None
@@ -78,16 +85,12 @@ class AppContainer:
     modify_itinerary: ModifyItineraryUseCase = None
 
 
-
 def build_trip_repository(settings: Settings) -> TripRepository:
     """Pick the configured trip data source."""
+    if settings.trip_source in ("mongo", "mongodb"):
+        return MongoTripRepository(settings)
     if settings.trip_source == "static":
-        if settings.app_env == "test":
-            return StaticTripRepository()
-        raise ValueError(
-            "Static trip source is not allowed in this environment. "
-            "Please use the Trvios API."
-        )
+        return StaticTripRepository()
     return TrviosTripRepository(
         settings.trvios_trips_api_url,
         api_key=settings.trvios_api_key,
@@ -100,6 +103,7 @@ def build_container(settings: Settings | None = None) -> AppContainer:
     resolved_settings.ensure_directories()
 
     trip_repository = build_trip_repository(resolved_settings)
+    mongo_trip_repository = MongoTripRepository(resolved_settings)
     knowledge_repository = StaticKnowledgeRepository()
     vector_store = ChromaVectorStore(resolved_settings.chroma_persist_dir)
     chat_service = build_chat_service(resolved_settings)
@@ -127,13 +131,21 @@ def build_container(settings: Settings | None = None) -> AppContainer:
     ollama_service = OllamaService(resolved_settings)
     get_place_details_use_case = GetPlaceDetailsUseCase(place_details_repository, ollama_service)
 
-    # Document Ingestion dependencies
+    # Document & FAQ Ingestion dependencies
     web_extractor = WebExtractor()
     pdf_extractor = PdfExtractor()
     image_extractor = ImageExtractor(resolved_settings)
     ingest_website_use_case = IngestWebsiteUseCase(web_extractor, vector_store)
     ingest_pdf_use_case = IngestPdfUseCase(pdf_extractor, vector_store)
     ingest_image_use_case = IngestImageUseCase(image_extractor, vector_store)
+    ingest_faq_use_case = IngestFaqUseCase(vector_store)
+    index_mongo_trips_use_case = IndexMongoTripsUseCase(mongo_trip_repository, vector_store)
+    plan_itinerary_use_case = PlanItineraryUseCase(
+        trip_repo=trip_repository,
+        vector_store=vector_store,
+        static_itinerary_engine=static_itinerary_engine,
+        google_places_service=google_places_service,
+    )
 
     return AppContainer(
         settings=resolved_settings,
@@ -150,6 +162,7 @@ def build_container(settings: Settings | None = None) -> AppContainer:
         recommendation_engine=recommendation_engine,
         safety_service=safety_service,
         book_trip=book_trip_use_case,
+        mongo_trip_repository=mongo_trip_repository,
         mongo_safety_repository=mongo_safety_repository,
         google_places_service=google_places_service,
         weather_service=weather_service,
@@ -161,6 +174,9 @@ def build_container(settings: Settings | None = None) -> AppContainer:
         ingest_website=ingest_website_use_case,
         ingest_pdf=ingest_pdf_use_case,
         ingest_image=ingest_image_use_case,
+        ingest_faq=ingest_faq_use_case,
+        index_mongo_trips=index_mongo_trips_use_case,
+        plan_itinerary=plan_itinerary_use_case,
 
         chat_with_trips=ChatWithTripsUseCase(
             vector_store=vector_store,
@@ -180,4 +196,3 @@ def build_container(settings: Settings | None = None) -> AppContainer:
             modify_itinerary_use_case=modify_itinerary_use_case,
         ),
     )
-

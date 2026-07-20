@@ -3,6 +3,24 @@
 from pydantic import BaseModel, Field
 
 
+class FaqItemSchema(BaseModel):
+    question: str = Field(
+        ...,
+        description="The FAQ question text.",
+        json_schema_extra={"example": "What is your cancellation policy?"}
+    )
+    answer: str = Field(
+        ...,
+        description="The FAQ answer text.",
+        json_schema_extra={"example": "Cancellation is allowed up to 48 hours before departure."}
+    )
+    category: str = Field(
+        default="General",
+        description="Optional FAQ category.",
+        json_schema_extra={"example": "Refunds"}
+    )
+
+
 class ItineraryItemSchema(BaseModel):
     day: int
     title: str
@@ -24,7 +42,6 @@ class TripSchema(BaseModel):
     start_date: str
     highlights: list[str]
     itinerary: list[ItineraryItemSchema]
-
 
 
 class IndexTripsSchema(BaseModel):
@@ -70,5 +87,3 @@ class PlaceDetailsResponseSchema(BaseModel):
     history: str | None = None
     parent_region: str | None = None
     additional_info: dict[str, str | None] = Field(default_factory=dict)
-
-

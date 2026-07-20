@@ -26,6 +26,15 @@ class VoiceChatResponseSchema(BaseModel):
     validation: dict[str, bool]
 
 
+class SyncChatResponseSchema(BaseModel):
+    query: str
+    answer: str
+    intent: str
+    entities: dict[str, Any]
+    sources: list[TripSourceSchema]
+    validation: dict[str, bool]
+
+
 def _format_sse_event(payload: dict[str, object]) -> str:
     return f"data: {json.dumps(payload)}\n\n"
 
@@ -98,6 +107,62 @@ async def check_user_safety_and_limits(
         return False, warning_msg
 
     return True, ""
+
+
+@router.post("", response_model=SyncChatResponseSchema)
+@router.post("/", response_model=SyncChatResponseSchema)
+async def chat_sync(request: Request, body: ChatRequestSchema) -> SyncChatResponseSchema:
+    """Synchronous AI chat endpoint returning complete JSON response with sources and intent."""
+    is_safe, warning_msg = await check_user_safety_and_limits(request, body.query, body.session_id)
+    if not is_safe:
+        return SyncChatResponseSchema(
+            query=body.query,
+            answer=warning_msg,
+            intent="SMALL_TALK",
+            entities={},
+            sources=[],
+            validation={"safety_ok": False, "hallucination_flagged": False}
+        )
+
+    container = request.app.state.container
+
+    full_answer = ""
+    sources = []
+    intent = "SMALL_TALK"
+    entities = {}
+    validation = {"safety_ok": True, "hallucination_flagged": False}
+
+    async for event in container.chat_with_trips.stream_execute(
+        ChatRequest(query=body.query, top_k=body.top_k, session_id=body.session_id)
+    ):
+        event_type = event.get("type")
+        if event_type == "metadata":
+            intent = event.get("intent", "SMALL_TALK")
+            entities = event.get("entities", {})
+        elif event_type == "sources":
+            sources = event.get("sources", [])
+        elif event_type == "token":
+            full_answer += event.get("content", "")
+        elif event_type == "done":
+            sources = event.get("sources", sources)
+            validation = event.get("validation", validation)
+
+    return SyncChatResponseSchema(
+        query=body.query,
+        answer=full_answer,
+        intent=intent,
+        entities=entities,
+        sources=[
+            TripSourceSchema(
+                id=s["id"],
+                title=s["title"],
+                destination=s.get("destination", ""),
+                score=s.get("score", 0.0)
+            )
+            for s in sources
+        ],
+        validation=validation
+    )
 
 
 @router.post("/stream")
@@ -255,8 +320,8 @@ async def voice_chat(
             TripSourceSchema(
                 id=s["id"],
                 title=s["title"],
-                destination=s["destination"],
-                score=s["score"]
+                destination=s.get("destination", ""),
+                score=s.get("score", 0.0)
             )
             for s in sources
         ],
