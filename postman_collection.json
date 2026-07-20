@@ -1,0 +1,248 @@
+{
+  "info": {
+    "_postman_id": "a3b1c2d3-e4f5-4a5b-9c8d-7e6f5a4b3c2d",
+    "name": "Trvios AI Assistant API Collection",
+    "description": "Postman Collection for Trvios Unified AI Chat, Training (FAQ, PDF, Website, MongoDB Trips), and Itinerary Planning APIs.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Unified API (Sync All-in-One Row)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"action\": \"sync_all\",\n  \"faq_items\": [\n    {\n      \"question\": \"What is your cancellation policy?\",\n      \"answer\": \"Cancellation is allowed up to 48 hours before departure.\",\n      \"category\": \"Refunds\"\n    }\n  ],\n  \"website_url\": \"https://trvios.com/manali-guide\",\n  \"pdf_filename\": \"manali_guide.pdf\",\n  \"pdf_base64\": \"\",\n  \"sync_mongodb\": true,\n  \"query\": \"What is your cancellation policy?\",\n  \"destination\": \"Manali\",\n  \"duration_days\": 3,\n  \"budget_level\": \"moderate\",\n  \"travel_style\": \"mountains\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/unified",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "unified"
+          ]
+        },
+        "description": "Executes FAQ training, Website training, PDF training, MongoDB trips training, AI Chat, and Itinerary Planning synchronously in 1 single row response."
+      }
+    },
+    {
+      "name": "2. AI Chat (Synchronous REST)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Tell me about tour packages for Udaipur\",\n  \"top_k\": 3,\n  \"session_id\": \"postman_session\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/chat",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "chat"
+          ]
+        },
+        "description": "Synchronous AI Chat query retrieving context across MongoDB trips, FAQs, PDFs, and website documents."
+      }
+    },
+    {
+      "name": "3. AI Chat (Streaming SSE)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"What are the best places to visit in Goa?\",\n  \"top_k\": 3,\n  \"session_id\": \"postman_stream_session\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/chat/stream",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "chat",
+            "stream"
+          ]
+        },
+        "description": "Real-time AI Chat streaming answer over Server-Sent Events (SSE)."
+      }
+    },
+    {
+      "name": "4. Train on FAQ",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"items\": [\n    {\n      \"question\": \"What is the refund policy?\",\n      \"answer\": \"100% refund up to 15 days before departure.\",\n      \"category\": \"Refunds\"\n    },\n    {\n      \"question\": \"Are bike rides included in Ladakh packages?\",\n      \"answer\": \"Yes, motorcycle expeditions in Ladakh include Royal Enfield bikes and mechanic backup.\",\n      \"category\": \"Rides\"\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/train/faq",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "train",
+            "faq"
+          ]
+        },
+        "description": "Trains and indexes FAQ Q&A pairs into the vector store."
+      }
+    },
+    {
+      "name": "5. Train on PDF",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": []
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/train/pdf",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "train",
+            "pdf"
+          ]
+        },
+        "description": "Uploads and indexes an extracted PDF document into the vector store."
+      }
+    },
+    {
+      "name": "6. Train on Website",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"url\": \"https://trvios.com/destinations\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/train/website",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "train",
+            "website"
+          ]
+        },
+        "description": "Downloads HTML text from a Web URL, cleans content, and indexes it into the vector store."
+      }
+    },
+    {
+      "name": "7. Train on MongoDB Trips",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/train/mongodb-trips",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "train",
+            "mongodb-trips"
+          ]
+        },
+        "description": "Fetches live MongoDB trip documents and syncs/indexes them into Chroma vector store."
+      }
+    },
+    {
+      "name": "8. Proper Itinerary Planning",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"destination\": \"Jaipur\",\n  \"duration_days\": 4,\n  \"budget_level\": \"moderate\",\n  \"travel_style\": \"cultural\",\n  \"interests\": [\"heritage\", \"palaces\", \"food\"],\n  \"companions\": \"friends\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/itinerary/plan",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "itinerary",
+            "plan"
+          ]
+        },
+        "description": "Generates a structured day-by-day travel itinerary with morning, afternoon, evening activities, food recommendations, and budget estimate."
+      }
+    },
+    {
+      "name": "9. Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "health"
+          ]
+        },
+        "description": "Checks system health and indexed vector counts."
+      }
+    }
+  ]
+}
