@@ -7,27 +7,46 @@ A premium python web application built using **Clean Architecture** patterns, le
 ## 🌟 Features
 
 - **Clean Architecture Directory Structure**: Clear boundary separation between Domain, Application, Infrastructure, and Presentation layers.
-- **Dynamic API Syncing**: Dynamically loads, maps, and stores travel itineraries from the external Trvios API (`https://api.trvios.com/api/ai/trips`) to ChromaDB.
+- **Unified 1-API Engine (`POST /api/unified`)**: Single synchronous endpoint handling AI Chat, FAQ training, PDF training, Website training, MongoDB trips training, and Itinerary Planning all in 1 row.
+- **Dynamic API Syncing**: Dynamically loads, maps, and stores travel itineraries from MongoDB or external Trvios API to ChromaDB.
 - **Deep Semantic Querying**: Custom indexes including detailed highlights and day-by-day itinerary schedules.
 - **SSE Streaming Answers**: Real-time natural language answers streaming token-by-token.
-- **Premium User Experience**: Responsive layout with modern Outfit typography, glassmorphism components, and an interactive slide-out drawer revealing full timeline itineraries when citations are clicked.
-- **Graceful Fallbacks**: Simulates high-fidelity conversational answers via a local word-by-word streamer if no OpenAI key is configured.
+- **Premium User Experience**: Responsive layout with modern Outfit typography, glassmorphism components, and interactive slide-out drawer revealing full timeline itineraries.
+- **Graceful Fallbacks**: Local word-by-word streamer fallback if no OpenAI key is configured.
+
+---
+
+## 📬 Postman API Collection & Sharing Guide
+
+All APIs are pre-configured in `postman_collection.json`. You can share or import all APIs using any of the following methods:
+
+### Option 1: Direct GitHub Link (Fastest)
+1. Open **Postman** -> Click **Import** (top left).
+2. Paste this URL:
+   `https://raw.githubusercontent.com/Muskanyadav29/ai-voice-assistant/main/postman_collection.json`
+3. Click **Import** — all 9 API endpoints will be imported into your Postman workspace!
+
+### Option 2: Share via OpenAPI / Swagger UI
+When the server is running, open the interactive browser documentation:
+- **Swagger UI:** `http://localhost:8000/docs`
+- **ReDoc UI:** `http://localhost:8000/redoc`
+- **OpenAPI JSON Spec:** `http://localhost:8000/openapi.json`
 
 ---
 
 ## 📁 Folder Structure & Architecture
 
-The application strictly adheres to Clean Architecture principles:
-
 ```text
 new project/
 |-- pyproject.toml              # Build system & package configurations
 |-- requirements.txt            # Production dependencies
+|-- postman_collection.json     # Postman API collection v2.1
 |-- data/
 |   `-- chroma/                 # Local vector database storage
 |-- src/
 |   `-- clean_app/
 |       |-- main.py             # Entry point
+|       |-- unified_service.py  # Merged 1-API service wrapper
 |       |-- domain/             # Core business entities and repository ports (interfaces)
 |       |   |-- entities/
 |       |   |   `-- trip.py     # Trip and ItineraryItem domain definitions
@@ -40,6 +59,9 @@ new project/
 |       |   `-- use_cases/
 |       |       |-- chat_with_trips.py
 |       |       |-- index_trips.py
+|       |       |-- index_mongo_trips.py
+|       |       |-- ingest_faq.py
+|       |       |-- plan_itinerary.py
 |       |       `-- list_trips.py
 |       |-- infrastructure/     # Database adapters, LLM client, configurations
 |       |   |-- ai/
@@ -48,7 +70,8 @@ new project/
 |       |   |   `-- settings.py          # Environment settings
 |       |   |-- persistence/
 |       |   |   |-- static_trip_repository.py
-|       |   |   `-- trvios_trip_repository.py  # Fetches live data from Trvios API
+|       |   |   |-- mongo_trip_repository.py
+|       |   |   `-- trvios_trip_repository.py
 |       |   `-- vector/
 |       |       `-- chroma_vector_store.py # ChromaDB vector store client
 |       `-- presentation/       # User interaction layers (Web Assets, REST API endpoints, CLI)
@@ -57,6 +80,9 @@ new project/
 |           |   |-- run.py      # Server runner
 |           |   |-- schemas.py  # Pydantic request/response validation schemas
 |           |   `-- routes/
+|           |       |-- unified.py    # POST /api/unified
+|           |       |-- train.py      # FAQ, PDF, Website, MongoDB training
+|           |       |-- itinerary.py  # Structured Itinerary Planning
 |           |       |-- chat.py
 |           |       `-- trips.py
 |           |-- cli/
@@ -66,15 +92,9 @@ new project/
 |               |-- styles.css
 |               `-- app.js
 `-- tests/                      # Automated test suite
-    |-- unit/                   # Unit tests (Entities, Mappings)
-    `-- integration/            # API integration tests (Streaming endpoints)
+    |-- unit/                   # Unit tests
+    `-- integration/            # API integration tests
 ```
-
-### Layer Responsibilities
-1. **Domain**: Contains the core rules of our application (e.g. `Trip` entity) and is completely decoupled from any frameworks, HTTP libraries, or databases.
-2. **Application**: Coordinates use cases (e.g. searching and streaming chat). Uses abstract repository interfaces (ports) to retrieve data.
-3. **Infrastructure**: Implementations of the repositories. Adapts the database (ChromaDB), web services (httpx fetching the API), and OpenAI completions.
-4. **Presentation**: The external entry points, including FastAPI routers, web UI elements, and validation models.
 
 ---
 
@@ -91,13 +111,9 @@ APP_DEBUG=true
 
 # Database locations
 CHROMA_PERSIST_DIR=./data/chroma
-AUTO_INDEX_TRIPS=true # Set to true to index trips on server start
+AUTO_INDEX_TRIPS=true
 
-# Data Source configuration: "trvios" (live API) or "static" (trips.json)
-TRIP_SOURCE=trvios
-TRVIOS_TRIPS_API_URL=https://api.trvios.com/api/ai/trips
-
-# Optional: Set OpenAI credentials to enable generative replies (falls back to local simulator without it)
+TRIP_SOURCE=static
 OPENAI_API_KEY=your-api-key-here
 OPENAI_MODEL=gpt-4o-mini
 
@@ -106,7 +122,6 @@ API_PORT=8000
 ```
 
 ### 3. Install Dependencies
-Set up your virtual environment and install the required modules:
 ```bash
 python -m venv .venv
 source .venv/bin/activate       # On Windows: .venv\Scripts\activate
@@ -114,30 +129,12 @@ pip install -r requirements.txt
 ```
 
 ### 4. Running the Web API Server
-Start the development server using:
 ```bash
-# Run server
 python -m clean_app.main api
 ```
-Access the application by opening `http://localhost:8000` in your web browser.
+Access the web UI at `http://localhost:8000` and Swagger docs at `http://localhost:8000/docs`.
 
-### 5. Running the CLI Diagnostics Tool
-To verify the catalog fetching, database counts, and search capabilities from the console, execute:
-```bash
-python -m clean_app.main
-```
-
-### 6. Running Tests
-Verify the installation by running the test suite:
+### 5. Running Tests
 ```bash
 python -m pytest
 ```
-
----
-
-## 🔒 Verification & Compliance
-
-This project has been thoroughly customized to support:
-1. ** लाइव API Integration**: Fully maps the Trvios endpoints, parsing durations (e.g. `"5 Days / 4 Nights"`), discount prices, and custom lists.
-2. ** Detailed Metadata Store**: Stores the itinerary timelines directly in ChromaDB.
-3. ** SSE Event-driven Streaming**: Sends custom structure events (`sources`, `token` segments, and `done` finalization) down the stream.
